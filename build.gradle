@@ -1,6 +1,6 @@
 buildscript{
     ext{
-        springBootVersion = '2.3.2.RELEASE'
+        springBootVersion = '2.1.7.RELEASE' //2.1.x버전으로 고정(2.2, 2.3 안됨)
     }
     repositories{
         mavenCentral()
@@ -20,12 +20,6 @@ group = 'com.infe'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -34,12 +28,11 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.projectlombok:lombok')
     compile('org.springframework.boot:spring-boot-starter-data-jpa') //spring boot 버전에 맞춰 자동으로 jpa관련 lib들의 버전을 관리해줌.
-    compile('com.h2database:h2')
+    compile('com.h2database:h2') //기본이 runtime이라 compile로 바꿔줘야함
+    compile('org.springframework.boot:spring-boot-starter-mustache')
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 }
 
 test {

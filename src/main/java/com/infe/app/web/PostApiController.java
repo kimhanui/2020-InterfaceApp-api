@@ -5,8 +5,10 @@ import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
+@Log
 @RequiredArgsConstructor
 @RestController
 public class PostApiController {
@@ -15,6 +17,7 @@ public class PostApiController {
     //url에 insert, update,,넣지 않고 HttpMethod로 Post, Put, Get, Delete구분...
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+        log.info(">>>>>>>> save controller");
         return postsService.save(requestDto);
     }
 
