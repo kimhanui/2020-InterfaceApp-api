@@ -1,0 +1,1 @@
+insert into posts(Created_Date,Modified_Date,title, content, author) values ('2020-08-13T03:17:14','2020-08-13T03:17:14','집회','대강당으로모이세여','서기');

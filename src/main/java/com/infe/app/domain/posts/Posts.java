@@ -28,6 +28,7 @@ public class Posts extends BaseTimeEntity {
         this.title = title;
         this.content = content;
     }
+
     @Builder //생성자처럼 작성.
     public Posts( String title, String content, String author) {
         this.title = title;

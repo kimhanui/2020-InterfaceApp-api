@@ -1,8 +1,33 @@
 {{>layout/header}} {{! 현재 머스테치 파일을 기준으로 다른 파일을 가져옴}}
-<h1>스프링 부트로 시작하는 웹 서비스</h1>
-<div class = "col-md-12">
-    <div class="col-md-6">
-        <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+<h1>스프링 부트로 시작하는 웹 서비스 Ver.2</h1>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+        </div>
+    </div>
+    <br>
+    <!--목록 출력 영역-->
+    <table class="table table-horizontal table-bordered">
+        <thead class="thead-strong">
+        <tr>
+            <th>게시글번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>최종수정일</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        {{#posts}} <!--머스테치문법-'#': posts라는 'List'순회(for문처럼)-->
+            <tr>
+                <td>{{id}}</td> <!--머스테치문법-변수명: List에서 뽑아낸 "객체"(객체자체를 뽑아내네!)의 필드 사용-->
+                <td><a href="/posts/update/{{id}}">{{title}}</a></td>
+                <td>{{author}}</td>
+                <td>{{modifiedDate}}</td>
+            </tr>
+        {{/posts}}
+        </tbody>
+    </table>
 </div>
-</div>
+
 {{>layout/footer}}
