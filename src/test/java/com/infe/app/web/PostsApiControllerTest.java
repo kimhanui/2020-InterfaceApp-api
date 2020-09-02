@@ -60,8 +60,8 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getBody()).isGreaterThan(0L); //id돌아오니까
 
         List<Posts> all = postsRepository.findAll();
-        assertThat(all.get(0).getTitle()).isEqualTo(title);
-        assertThat(all.get(0).getContent()).isEqualTo(content);
+        assertThat(all.get(1).getTitle()).isEqualTo(title); //0번은 data.sql값이므로
+        assertThat(all.get(1).getContent()).isEqualTo(content);
     }
 
     @Test

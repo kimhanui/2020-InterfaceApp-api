@@ -1,6 +1,7 @@
 package com.infe.app.domain.member;
 
 import com.infe.app.domain.BaseTimeEntity;
+import com.infe.app.web.dto.MemberRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +27,17 @@ public class Member extends BaseTimeEntity {
     private Long groupNum; //기수
 
     @Builder
-    public Member(Long id, Long studentId, String name, Long groupNum){
+    public Member(Long id, Long studentId, String name, Long groupNum) {
         this.id = id;
         this.studentId = studentId;
         this.name = name;
         this.groupNum = groupNum;
+    }
+
+    public void update(MemberRequestDto dto) {
+        this.studentId = dto.getStudentId();
+        this.name =dto.getName();
+        this.groupNum = dto.getGroupNum();
     }
 
 }
