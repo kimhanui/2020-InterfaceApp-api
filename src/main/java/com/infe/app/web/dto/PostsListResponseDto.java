@@ -12,7 +12,8 @@ public class PostsListResponseDto {
     private String title;
     private String author;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+//    @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
     private LocalDateTime modifiedDate;
 
     public PostsListResponseDto(Posts entity) {

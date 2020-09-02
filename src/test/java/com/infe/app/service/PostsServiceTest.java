@@ -2,15 +2,19 @@ package com.infe.app.service;
 
 import com.infe.app.domain.posts.Posts;
 import com.infe.app.domain.posts.PostsRepository;
+import com.infe.app.web.dto.PostsListResponseDto;
 import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.extern.java.Log;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +27,18 @@ public class PostsServiceTest {
     @Autowired
     private PostsService service;
 
+    @Before
+    public void insertData(){
+
+    }
+    @Test
+    public void PostsService_findAllDesc(){
+        List<PostsListResponseDto> postsList = service.findAllDesc();
+        for ( PostsListResponseDto dto : postsList ) {
+            log.info("["+dto.getId()+"] "+dto.getModifiedDate());
+        }
+
+    }
     @Test
     public void PostsService_update됨() {
         //given

@@ -1,12 +1,12 @@
 package com.infe.app.web;
 
 import com.infe.app.service.PostsService;
-import com.infe.app.web.dto.PostsResponseDto;
-import com.infe.app.web.dto.PostsSaveRequestDto;
-import com.infe.app.web.dto.PostsUpdateRequestDto;
+import com.infe.app.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log
 @RequiredArgsConstructor
@@ -33,9 +33,18 @@ public class PostApiController {
         return postsService.findById(id);
     }
 
+    @GetMapping("/api/v1/member/list")
+    public List<PostsListResponseDto> findAll(){
+        return postsService.findAllDesc();
+    }
+
     @DeleteMapping("/api/v1/posts/{id}")
     public void delete(@PathVariable Long id){
         postsService.delete(id);
     }
 
+    @DeleteMapping("/api/v1/posts/all")
+    public void deleteAll(){
+        postsService.deleteAll();
+    }
 }

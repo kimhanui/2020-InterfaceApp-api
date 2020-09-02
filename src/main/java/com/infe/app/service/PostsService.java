@@ -21,7 +21,7 @@ public class PostsService {
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
         return postsRepository.save(requestDto.toEntity()).getId();
-        //save하고 getId하면 INSERT, FIND 2쿼리?
+        //save하고 getId하면 INSERT, FIND 2쿼리
     }
 
     @Transactional
@@ -52,6 +52,11 @@ public class PostsService {
     @Transactional
     public void delete(Long id) throws IllegalArgumentException {
             postsRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAll(){
+        postsRepository.deleteAll();
     }
 
 }
