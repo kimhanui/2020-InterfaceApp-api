@@ -30,6 +30,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa') //spring boot 버전에 맞춰 자동으로 jpa관련 lib들의 버전을 관리해줌.
     compile('com.h2database:h2') //기본이 runtime이라 compile로 바꿔줘야함
     compile('org.springframework.boot:spring-boot-starter-mustache')
+    compile ('io.airbrake:javabrake:0.1.6')//heroku-addon "airbrake"
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
