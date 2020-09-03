@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)//JPA기능 작동
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MemberControllerTest {
+public class MemberApiControllerTest {
     @LocalServerPort
     private int port;
 

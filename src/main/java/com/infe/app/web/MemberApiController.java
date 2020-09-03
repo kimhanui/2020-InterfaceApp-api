@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class MemberController {
+public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping("/api/v1/member")
