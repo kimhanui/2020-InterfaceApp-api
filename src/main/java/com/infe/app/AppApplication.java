@@ -14,11 +14,6 @@ public class AppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AppApplication.class, args);
-
-        //Heroku addon - airbrake
-        int projectId = 294171;
-        String projectKey = "615ab80a2babeec2b7f93244736bad75";
-        Notifier notifier = new Notifier(projectId, projectKey);
     }
 
 }
