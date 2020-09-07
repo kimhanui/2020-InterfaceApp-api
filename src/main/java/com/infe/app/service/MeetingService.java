@@ -27,7 +27,7 @@ public class MeetingService {
     @Transactional
     public Long insertMeeting(AdminRequestDto dto) { //출석키 중복확인
         Meeting meeting = Meeting.builder()
-                                .passkey(dto.getPassKey())
+                                .passkey(dto.getPasskey())
                                 .createdDateTime(dto.getStartTime())
                                 .endDateTime(dto.getEndTime())
                                 .build();
@@ -36,7 +36,7 @@ public class MeetingService {
 
     @Transactional
     public Long isMeetingExist(AdminRequestDto dto){
-        Meeting meeting = meetingRepository.findMeetingByPasskey(dto.getPassKey())
+        Meeting meeting = meetingRepository.findMeetingByPasskey(dto.getPasskey())
             .orElseThrow (()-> new IllegalArgumentException("찾는 모임이 없습니다."));
         return meeting.getId();
     }

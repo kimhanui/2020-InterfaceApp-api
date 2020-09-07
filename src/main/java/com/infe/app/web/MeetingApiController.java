@@ -1,6 +1,5 @@
 package com.infe.app.web;
 
-import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
@@ -39,9 +38,9 @@ public class MeetingApiController { //0000으로 초기화?
         try {
             Long resId = meetingService.insertAttendee(dto);
             return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("잘못된 출석암호입니다.", HttpStatus.BAD_REQUEST);
-        }catch(TimeoutException te){
+        } catch (TimeoutException te) {
             return new ResponseEntity<>("만료된 출석암호입니다..", HttpStatus.UNAUTHORIZED);
         }
     }

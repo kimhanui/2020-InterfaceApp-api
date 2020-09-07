@@ -1,5 +1,6 @@
 package com.infe.app.web.dto.Meeting;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.member.Member;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class MemberMeetingResponseDto {
     private String name;
     private Long groupNum;
     private String passkey;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdDateTime;
 
     public MemberMeetingResponseDto(Member m, Meeting mt){
