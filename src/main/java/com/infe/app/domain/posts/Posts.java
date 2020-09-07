@@ -21,8 +21,6 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private String author;
-
 
     public void update(String title, String content){
         this.title = title;
@@ -30,9 +28,8 @@ public class Posts extends BaseTimeEntity {
     }
 
     @Builder //생성자처럼 작성.
-    public Posts( String title, String content, String author) {
+    public Posts( String title, String content) {
         this.title = title;
         this.content = content;
-        this.author = author;
     }
 }

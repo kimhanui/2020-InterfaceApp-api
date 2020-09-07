@@ -32,7 +32,6 @@ public class PostsRepositoryTest {
         postsRepository.save(Posts.builder()
                 .title("title")
                 .content("content")
-                .author("author")
                 .build());
 
         //when
@@ -41,10 +40,10 @@ public class PostsRepositoryTest {
         //then
         Posts posts = postsList.get(0);
 
-        log.info(">>>>>>>>> createDate="+posts.getCreatedDate()+", modifiedDate="+posts.getModifiedDate());
+        log.info(">>>>>>>>> createDate="+posts.getCreatedDateTime()+", modifiedDate="+posts.getModifiedDateTime());
 
-        assertThat(posts.getCreatedDate()).isAfter(now);
-        assertThat(posts.getModifiedDate()).isAfter(now);
+        assertThat(posts.getCreatedDateTime()).isAfter(now);
+        assertThat(posts.getModifiedDateTime()).isAfter(now);
 
     }
 
@@ -57,7 +56,6 @@ public class PostsRepositoryTest {
         postsRepository.save(Posts.builder()
         .title(title)
         .content(content)
-        .author("kimhanui")
         .build());
 
         //when
