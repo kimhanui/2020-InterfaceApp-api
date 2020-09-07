@@ -6,6 +6,9 @@ branches:
   only:
     - dev
 
+before_install:
+  - chmod +x gradlew
+
 # Travis CI 서버의 Cache 활성화
 cache:
   directories:
