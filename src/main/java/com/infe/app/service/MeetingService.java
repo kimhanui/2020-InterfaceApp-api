@@ -4,11 +4,13 @@ import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.web.dto.Meeting.MeetingRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-
+@Log
 @RequiredArgsConstructor
 @Service
 public class MeetingService {
@@ -66,8 +68,8 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberResponseDto> findAllMemberDateDesc(LocalDateTime dateTime) {
-        return meetingRepository.findAllMemberDesc(dateTime).stream()
+    public List<MemberResponseDto> findAllMemberDateDesc(MeetingRequestDto dto) {
+        return meetingRepository.findAllMemberDesc(dto.getDateTime()).stream()
                 .map(MemberResponseDto::new).collect(Collectors.toList());
     }
 
@@ -77,11 +79,11 @@ public class MeetingService {
     }
 
     @Transactional
-    public void deleteAllByDate(LocalDateTime dateTime){
-        Meeting meeting = meetingRepository.findMeetingByCreatedDateTime(dateTime)
+    public void deleteAllByDate(MeetingRequestDto dto){
+        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dto.getDateTime())
                 .orElseThrow(()-> new IllegalArgumentException("찾는 모임이 없습니다."));
 
-        List<Member> members = meetingRepository.findAllMemberDesc(dateTime);
+        List<Member> members = meetingRepository.findAllMemberDesc(dto.getDateTime());
         memberRepository.deleteAll(members);
         meetingRepository.delete(meeting);
     }

@@ -14,7 +14,7 @@ public class MemberMeetingResponseDto {
     private String name;
     private Long groupNum;
     private String passkey;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdDateTime;
 
     public MemberMeetingResponseDto(Member m, Meeting mt){

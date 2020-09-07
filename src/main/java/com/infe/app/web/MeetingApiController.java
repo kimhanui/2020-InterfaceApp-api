@@ -2,6 +2,7 @@ package com.infe.app.web;
 
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
+import com.infe.app.web.dto.Meeting.MeetingRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
@@ -39,15 +40,15 @@ public class MeetingApiController { //0000으로 초기화?
             Long resId = meetingService.insertAttendee(dto);
             return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("잘못된 출석암호입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("잘못된 출석암호입니다..", HttpStatus.BAD_REQUEST);
         } catch (TimeoutException te) {
             return new ResponseEntity<>("만료된 출석암호입니다..", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @GetMapping("/api/v1/meet/userList/{date}") //날짜별
-    public List<MemberResponseDto> findAllMemberByDate(@PathVariable LocalDateTime date) {
-        return meetingService.findAllMemberDateDesc(date);
+    @PostMapping("/api/v1/meet/userList") //날짜별
+    public List<MemberResponseDto> findAllMemberByDate( @RequestBody MeetingRequestDto dto) {
+        return meetingService.findAllMemberDateDesc(dto);
     }
 
     @GetMapping("/api/v1/meet/userList")
@@ -56,8 +57,13 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     //삭제 모호 - 날짜별 출석한 학생 삭제
-    @DeleteMapping("/api/v1/meet/all/{date}") //날짜별
-    public void deleteAllMember(@PathVariable LocalDateTime date) {
-        meetingService.deleteAllByDate(date);
+    @PostMapping("/api/v1/meet/deleteAll") //날짜별
+    public ResponseEntity<String> deleteAllMember(@RequestBody MeetingRequestDto dto) {
+        try{
+            meetingService.deleteAllByDate(dto);
+            return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
+        }catch(IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -15,7 +15,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     //이미 만들어진 Meeting을 찾는 메서드 (by meetingName 또는 value)
     Optional<Meeting> findMeetingByPasskey(String passKey);
 
-    Optional<Meeting> findMeetingByCreatedDateTime(LocalDateTime dateTime);
+    Optional<Meeting> findMeetingsByCreatedDateTime(LocalDateTime dateTime);
 
     @Query(value = "select m from Member m Join m.meetings mt " +
             "where mt.createdDateTime = :dateTime order By m.studentId DESC")
