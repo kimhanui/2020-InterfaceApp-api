@@ -4,6 +4,7 @@ import com.infe.app.domain.posts.Posts;
 import com.infe.app.domain.posts.PostsRepository;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
+import lombok.extern.java.Log;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Log
 @RunWith(SpringRunner.class)
 //WebMvcTest안쓴 이유: JPA 기능이 작동하지 않기 때문, Controller와 ControllerAdvice 등 외부연동과 관련된 부분만 활성화됨.
 //JPA기능까지 한번에 테스트할때는 @SpringBootTest + TestRestTemplate을 사용하면 된다.

@@ -3,6 +3,7 @@ package com.infe.app.service;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
 import com.infe.app.domain.member.Member;
+import com.infe.app.web.dto.Meeting.MeetingRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
 import lombok.extern.java.Log;
@@ -54,7 +55,7 @@ public class MeetingServiceTest {
         String passkey = "SSD2K";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(110110L)
-                .studentName("MOMO")
+                .name("MOMO")
                 .groupNum(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
@@ -80,7 +81,7 @@ public class MeetingServiceTest {
         String passkey = "SSD2KKKK";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(110110L)
-                .studentName("MOMO")
+                .name("MOMO")
                 .groupNum(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
@@ -102,7 +103,7 @@ public class MeetingServiceTest {
         String passkey = "SSD2K";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(110110L)
-                .studentName("MOMO")
+                .name("MOMO")
                 .groupNum(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
@@ -151,14 +152,15 @@ public class MeetingServiceTest {
     public void deleteAllByDate() {
         //when
         LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
-        meetingService.deleteAllByDate(dateTime);
+        MeetingRequestDto dto = new MeetingRequestDto(dateTime);
+        meetingService.deleteAllByDate(dto);
 
         //then
         List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
-        Meeting meeting = meetingRepository.findMeetingByCreatedDateTime(dateTime).orElse(null);
+        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dateTime).orElse(null);
         assertThat(meeting).isEqualTo(null);
-        for (MemberMeetingResponseDto dto : dtos) {
-            assertThat(dto.getCreatedDateTime()).isNotEqualTo(dateTime);
+        for (MemberMeetingResponseDto dtoi : dtos) {
+            assertThat(dtoi.getCreatedDateTime()).isNotEqualTo(dateTime);
         }
     }
 }

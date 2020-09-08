@@ -26,10 +26,6 @@ public class PostsServiceTest {
     @Autowired
     private PostsService service;
 
-    @Before
-    public void insertData() {
-
-    }
 
     @Test
     public void PostsService_findAllDesc() {

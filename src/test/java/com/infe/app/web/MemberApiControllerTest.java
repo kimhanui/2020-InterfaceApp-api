@@ -32,11 +32,6 @@ public class MemberApiControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @After
-    public void tearDown() throws Exception {
-        memberRepository.deleteAll();
-    }
-
     @Test
     public void Member_등록된다() throws Exception {
         //given
@@ -49,7 +44,7 @@ public class MemberApiControllerTest {
                 .name(NAME)
                 .groupNum(GROUPNUM)
                 .build();
-        String url = "http://localhost:+" + port + "/api/v1/member";
+        String url = "http://localhost:" + port + "/api/v1/member";
 
         // when
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, dto, Long.class);
@@ -59,21 +54,22 @@ public class MemberApiControllerTest {
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Member> members = memberRepository.findAll();
-        assertThat(members.get(0).getStudentId()).isEqualTo(STUDENTID);
-        assertThat(members.get(0).getName()).isEqualTo(NAME);
-        assertThat(members.get(0).getGroupNum()).isEqualTo(GROUPNUM);
+        int size = members.size();
+        assertThat(members.get(size-1).getStudentId()).isEqualTo(STUDENTID);
+        assertThat(members.get(size-1).getName()).isEqualTo(NAME);
+        assertThat(members.get(size-1).getGroupNum()).isEqualTo(GROUPNUM);
     }
 
     @Test
     public void Member_수정된다() throws Exception {
         //given
         Member savedMember = memberRepository.save(Member.builder()
-                .studentId(100100L)
+                .studentId(999999L)
                 .name("kim-before")
                 .groupNum(1L)
                 .build());
         Long targetId = savedMember.getId();
-        Long expectedStudentId = 200200L;
+        Long expectedStudentId = 999999L;
         String expectedName = "kim-after";
         Long expedtedGroupNum = 2L;
 
@@ -86,7 +82,7 @@ public class MemberApiControllerTest {
         String url = "http://localhost:" + port + "/api/v1/member/" + targetId;
         HttpEntity<MemberRequestDto> requestEntity = new HttpEntity<>(memberRequestDto);
 
-        //when-업데이트 실행행
+        //when
         ResponseEntity<Long> responseEntity =
                 restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
 
@@ -99,15 +95,4 @@ public class MemberApiControllerTest {
         assertThat(members.get(0).getName()).isEqualTo(expectedName);
         assertThat(members.get(0).getGroupNum()).isEqualTo(expedtedGroupNum);
     }
-
-    @Test
-    public void Member_삭제된다() {
-
-    }
-
-    @Test
-    public void Member_모두조회() {
-
-    }
-
 }

@@ -21,7 +21,7 @@ public class PostsRepositoryTest {
     PostsRepository postsRepository;
 
     @After//이거 괜찮네!
-    public void cleanup(){
+    public void tearDown() throws Exception{
         postsRepository.deleteAll();
     }
 
@@ -62,7 +62,8 @@ public class PostsRepositoryTest {
         List<Posts> postsList = postsRepository.findAll();
 
         //then
-        Posts posts = postsList.get(0);
+        int size = postsList.size();
+        Posts posts = postsList.get(size-1);
         assertThat(posts.getTitle()).isEqualTo(title);
         assertThat(posts.getContent()).isEqualTo(content);
     }
