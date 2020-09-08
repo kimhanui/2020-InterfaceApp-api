@@ -1,6 +1,6 @@
-# 2020-InterfaceApp-api
+# 2020-InterfaceApp-api  [![Build Status](https://travis-ci.com/kimhanui/2020-InterfaceApp-api.svg?branch=dev)](https://travis-ci.com/kimhanui/2020-InterfaceApp-api)
 App for computer study club "Interface".
-### ain function: notice, member list
+### main function: notice, member list
 > member: jkey20(android), kimhanui(backend, server)
 
 ### Development Enviroment
