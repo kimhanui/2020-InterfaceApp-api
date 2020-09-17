@@ -4,6 +4,7 @@ import com.infe.app.domain.posts.Posts;
 import com.infe.app.domain.posts.PostsRepository;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
+import lombok.extern.java.Log;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Log
 @RunWith(SpringRunner.class)
 //WebMvcTest안쓴 이유: JPA 기능이 작동하지 않기 때문, Controller와 ControllerAdvice 등 외부연동과 관련된 부분만 활성화됨.
 //JPA기능까지 한번에 테스트할때는 @SpringBootTest + TestRestTemplate을 사용하면 된다.
@@ -48,7 +50,6 @@ public class PostsApiControllerTest {
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
                 .title(title)
                 .content(content)
-                .author("kim")
                 .build();
         String url = "http://localhost:"+port+"/api/v1/posts";
 
@@ -60,8 +61,9 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getBody()).isGreaterThan(0L); //id돌아오니까
 
         List<Posts> all = postsRepository.findAll();
-        assertThat(all.get(1).getTitle()).isEqualTo(title); //0번은 data.sql값이므로
-        assertThat(all.get(1).getContent()).isEqualTo(content);
+        int size = all.size();
+        assertThat(all.get(size-1).getTitle()).isEqualTo(title); //0번은 data.sql값이므로
+        assertThat(all.get(size-1).getContent()).isEqualTo(content);
     }
 
     @Test
@@ -70,7 +72,6 @@ public class PostsApiControllerTest {
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .title("title")
                 .content("content")
-                .author("author")
                 .build());
 
         Long updateId = savedPosts.getId();
@@ -93,6 +94,7 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getBody()).isGreaterThan(0L);//id돌려주니까
 
         List<Posts> all = postsRepository.findAll();
+
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
     }

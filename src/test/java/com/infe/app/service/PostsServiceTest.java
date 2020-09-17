@@ -1,6 +1,5 @@
 package com.infe.app.service;
 
-import com.infe.app.domain.posts.Posts;
 import com.infe.app.domain.posts.PostsRepository;
 import com.infe.app.web.dto.PostsListResponseDto;
 import com.infe.app.web.dto.PostsResponseDto;
@@ -27,18 +26,16 @@ public class PostsServiceTest {
     @Autowired
     private PostsService service;
 
-    @Before
-    public void insertData(){
 
-    }
     @Test
-    public void PostsService_findAllDesc(){
+    public void PostsService_findAllDesc() {
         List<PostsListResponseDto> postsList = service.findAllDesc();
-        for ( PostsListResponseDto dto : postsList ) {
-            log.info("["+dto.getId()+"] "+dto.getModifiedDate());
+        for (PostsListResponseDto dto : postsList) {
+            log.info("[" + dto.getId() + "] " + dto.getModifiedDate());
         }
 
     }
+
     @Test
     public void PostsService_update됨() {
         //given
@@ -47,10 +44,9 @@ public class PostsServiceTest {
         PostsSaveRequestDto saveRequestDto = PostsSaveRequestDto.builder()
                 .title(title)
                 .content(content)
-                .author("kim")
                 .build();
 
-        Long savedId=repo.saveAndFlush(saveRequestDto.toEntity()).getId();
+        Long savedId = repo.saveAndFlush(saveRequestDto.toEntity()).getId();
 
 
         String expectedTitle = "expectedTitle";
@@ -61,11 +57,11 @@ public class PostsServiceTest {
                 .build();
 
         //when
-        log.info("original: title="+saveRequestDto.getTitle()+", content="+saveRequestDto.getContent());
+        log.info("original: title=" + saveRequestDto.getTitle() + ", content=" + saveRequestDto.getContent());
         Long id = service.update(savedId, updateRequestDto);
         repo.flush();
         PostsResponseDto foundPostsDto = service.findById(id);
-        log.info("original: title="+foundPostsDto.getTitle()+", content="+foundPostsDto.getContent());
+        log.info("original: title=" + foundPostsDto.getTitle() + ", content=" + foundPostsDto.getContent());
         //then
 
         assertThat(foundPostsDto.getTitle()).isEqualTo(foundPostsDto.getTitle());
