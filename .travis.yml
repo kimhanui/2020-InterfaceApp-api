@@ -6,6 +6,7 @@ jdk:
 branches:
   only:
     - dev
+    - master
 
 before_install:
   - chmod a+x gradlew
@@ -16,7 +17,7 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-# clean 후 Build (Build시 자동으로 test 수행)
+# clean 후 Build (Build시 자동으로 test 수행, 어차피 test 프로퍼티로 빌드됨)
 script: "./gradlew clean build"
 
 after_success:

@@ -13,7 +13,6 @@ build/
 .settings
 .springBeans
 .sts4-cache
-application-oauth.properties
 
 ### IntelliJ IDEA ###
 .idea

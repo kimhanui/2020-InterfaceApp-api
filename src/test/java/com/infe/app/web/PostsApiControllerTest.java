@@ -38,12 +38,12 @@ public class PostsApiControllerTest {
     private PostsRepository postsRepository;
 
     @After
-    public void tearDown() throws Exception{
+    public void tearDown() throws Exception {
         postsRepository.deleteAll();
     }
 
     @Test   //tx는 안 쓴다.
-    public void Posts_등록된다() throws Exception{
+    public void Posts_등록된다() throws Exception {
         //given
         String title = "title";
         String content = "content";
@@ -51,7 +51,7 @@ public class PostsApiControllerTest {
                 .title(title)
                 .content(content)
                 .build();
-        String url = "http://localhost:"+port+"/api/v1/posts";
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         //when
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
@@ -62,12 +62,12 @@ public class PostsApiControllerTest {
 
         List<Posts> all = postsRepository.findAll();
         int size = all.size();
-        assertThat(all.get(size-1).getTitle()).isEqualTo(title); //0번은 data.sql값이므로
-        assertThat(all.get(size-1).getContent()).isEqualTo(content);
+        assertThat(all.get(size - 1).getTitle()).isEqualTo(title); //0번은 data.sql값이므로
+        assertThat(all.get(size - 1).getContent()).isEqualTo(content);
     }
 
     @Test
-    public void Posts_수정된다() throws Exception{
+    public void Posts_수정된다() throws Exception {
         //given
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .title("title")
@@ -83,7 +83,7 @@ public class PostsApiControllerTest {
                 .content(expectedContent)
                 .build();
 
-        String url = "http://localhost:"+port+"/api/v1/posts/"+updateId;
+        String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
         HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
 
         //when - 업데이트 실행

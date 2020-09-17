@@ -3,7 +3,6 @@ package com.infe.app.web;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
 import com.infe.app.web.dto.MemberRequestDto;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +54,9 @@ public class MemberApiControllerTest {
 
         List<Member> members = memberRepository.findAll();
         int size = members.size();
-        assertThat(members.get(size-1).getStudentId()).isEqualTo(STUDENTID);
-        assertThat(members.get(size-1).getName()).isEqualTo(NAME);
-        assertThat(members.get(size-1).getGroupNum()).isEqualTo(GROUPNUM);
+        assertThat(members.get(size - 1).getStudentId()).isEqualTo(STUDENTID);
+        assertThat(members.get(size - 1).getName()).isEqualTo(NAME);
+        assertThat(members.get(size - 1).getGroupNum()).isEqualTo(GROUPNUM);
     }
 
     @Test
