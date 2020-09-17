@@ -6,7 +6,6 @@ import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.extern.java.Log;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
