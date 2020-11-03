@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class PostsListResponseDto {
     private Long id;
     private String title;
-
+    private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime modifiedDate;
 
@@ -18,6 +18,6 @@ public class PostsListResponseDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.modifiedDate = entity.getModifiedDateTime();
+        this.content = entity.getContent();
     }
-
 }

@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.validation.constraints.Max;
 import java.util.List;
+
 @Log
 @RequiredArgsConstructor
 @Controller //뷰 나타낼 용이라 ㅇㅇ
