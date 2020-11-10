@@ -14,7 +14,6 @@ import java.sql.SQLException;
  */
 @Configuration
 @Profile("local")
-@PropertySource({"classpath:application-local.properties"})
 public class H2ServerConfiguration {
 
     @Bean
