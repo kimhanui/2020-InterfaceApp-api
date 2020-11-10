@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * 제공하는 TcpServer를 사용한다.
  */
 @Configuration
-@Profile(value={"local","develop"})
+@Profile("local")
 @PropertySource({"classpath:application-local.properties"})
 public class H2ServerConfiguration {
 

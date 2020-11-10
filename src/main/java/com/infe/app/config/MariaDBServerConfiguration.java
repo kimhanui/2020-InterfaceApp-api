@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@Profile(value="prod")
+@Profile(value={"develop","prod"})
 @PropertySource({"classpath:application-develop.properties"})
 public class MariaDBServerConfiguration {
 }
