@@ -26,14 +26,14 @@ public class PostsServiceTest {
     private PostsService service;
 
 
-    @Test
-    public void PostsService_findAllDesc() {
-        List<PostsListResponseDto> postsList = service.findAllDesc();
-        for (PostsListResponseDto dto : postsList) {
-            log.info("[" + dto.getId() + "] " + dto.getModifiedDate());
-        }
-
-    }
+//    @Test
+//    public void PostsService_findAllDesc() {
+//        List<PostsListResponseDto> postsList = service.findAllDesc();
+//        for (PostsListResponseDto dto : postsList) {
+//            log.info("[" + dto.getId() + "] " + dto.getModifiedDate());
+//        }
+//
+//    }
 
     @Test
     public void PostsService_update됨() {

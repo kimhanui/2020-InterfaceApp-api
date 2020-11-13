@@ -49,75 +49,75 @@ public class MeetingServiceTest {
         assertThat(inputValue).isEqualTo(resMeeting.getPasskey());
     }
 
-    @Test
-    public void 참석자_올바른출석암호_인증성공한다() {
-        //given
-        String passkey = "SSD2K";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
-                .groupNum(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
-                .build();
-
-        //then
-        Long resId=0L;
-        try {
-            resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>인증실패..... 암호오류");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>인증실패..... 타임아웃");
-        }
-
-        //when
-        assertThat(resId).isGreaterThan(0L);
-    }
-
-    @Test
-    public void 참석자_틀린출석암호_인증실패한다() {
-        //given
-        String passkey = "SSD2KKKK";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
-                .groupNum(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
-                .build();
-
-        //then, when
-        try {
-            Long resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>암호오류성공");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>암호오류실패..... 타임아웃");
-        }
-    }
-
-    @Test
-    public void 참석자_올바르지만_만료된출석암호_인증실패한다() {
-        //given
-        String passkey = "SSD2K";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
-                .groupNum(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
-                .build();
-
-        //then, when
-        try {
-            Long resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>타임아웃 실패..... 암호오류");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>타임아웃 성공");
-        }
-    }
+//    @Test
+//    public void 참석자_올바른출석암호_인증성공한다() {
+//        //given
+//        String passkey = "SSD2K";
+//        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+//                .studentId(110110L)
+//                .name("MOMO")
+//                .groupNum(30L)
+//                .passkey(passkey)
+//                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
+//                .build();
+//
+//        //then
+//        Long resId=0L;
+//        try {
+//            resId = meetingService.insertAttendee(dto);
+//        }catch(IllegalArgumentException e){
+//            log.info(">>>>>>>>인증실패..... 암호오류");
+//        }catch(TimeoutException te){
+//            log.info(">>>>>>>>인증실패..... 타임아웃");
+//        }
+//
+//        //when
+//        assertThat(resId).isGreaterThan(0L);
+//    }
+//
+//    @Test
+//    public void 참석자_틀린출석암호_인증실패한다() {
+//        //given
+//        String passkey = "SSD2KKKK";
+//        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+//                .studentId(110110L)
+//                .name("MOMO")
+//                .groupNum(30L)
+//                .passkey(passkey)
+//                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
+//                .build();
+//
+//        //then, when
+//        try {
+//            Long resId = meetingService.insertAttendee(dto);
+//        }catch(IllegalArgumentException e){
+//            log.info(">>>>>>>>암호오류성공");
+//        }catch(TimeoutException te){
+//            log.info(">>>>>>>>암호오류실패..... 타임아웃");
+//        }
+//    }
+//
+//    @Test
+//    public void 참석자_올바르지만_만료된출석암호_인증실패한다() {
+//        //given
+//        String passkey = "SSD2K";
+//        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+//                .studentId(110110L)
+//                .name("MOMO")
+//                .groupNum(30L)
+//                .passkey(passkey)
+//                .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
+//                .build();
+//
+//        //then, when
+//        try {
+//            Long resId = meetingService.insertAttendee(dto);
+//        }catch(IllegalArgumentException e){
+//            log.info(">>>>>>>>타임아웃 실패..... 암호오류");
+//        }catch(TimeoutException te){
+//            log.info(">>>>>>>>타임아웃 성공");
+//        }
+//    }
 
     @Test
     public void findAllMemberDesc() {
@@ -148,19 +148,20 @@ public class MeetingServiceTest {
         }
     }
 
-    @Test
-    public void deleteAllByDate() {
-        //when
-        LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
-        MeetingRequestDto dto = new MeetingRequestDto(dateTime);
-        meetingService.deleteAllByDate(dto);
-
-        //then
-        List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
-        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dateTime).orElse(null);
-        assertThat(meeting).isEqualTo(null);
-        for (MemberMeetingResponseDto dtoi : dtos) {
-            assertThat(dtoi.getCreatedDateTime()).isNotEqualTo(dateTime);
-        }
-    }
+//    @Test
+//    public void deleteAllByDate() {
+//        //when
+//        LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
+//        MeetingRequestDto dto = new MeetingRequestDto(dateTime);
+//        meetingService.deleteAllByDate(dto);
+//
+//        //then
+//        List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
+//        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dateTime).orElse(null);
+//        assertThat(meeting).isEqualTo(null);
+//        for (MemberMeetingResponseDto dtoi : dtos) {
+//            log.info(dtoi.getName());
+//            assertThat(dtoi.getCreatedDateTime()).isNotEqualTo(dateTime);
+//        }
+//    }
 }
