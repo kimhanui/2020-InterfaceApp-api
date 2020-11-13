@@ -66,11 +66,13 @@ public class MemberApiControllerTest {
                 .studentId(999999L)
                 .name("kim-before")
                 .groupNum(1L)
+                .contact("1234-1234")
                 .build());
         Long targetId = savedMember.getId();
         Long expectedStudentId = 999999L;
         String expectedName = "kim-after";
         Long expedtedGroupNum = 2L;
+        String expectedContact = "1234-1234";
 
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .studentId(expectedStudentId)
@@ -93,5 +95,6 @@ public class MemberApiControllerTest {
         assertThat(members.get(0).getStudentId()).isEqualTo(expectedStudentId);
         assertThat(members.get(0).getName()).isEqualTo(expectedName);
         assertThat(members.get(0).getGroupNum()).isEqualTo(expedtedGroupNum);
+        assertThat(members.get(0).getContact()).isEqualTo(expectedContact);
     }
 }
