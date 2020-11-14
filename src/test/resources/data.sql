@@ -1,3 +1,4 @@
+set foreign_key_checks =0;
 insert into posts(createdDateTime, modifiedDateTime,title, content) values ('2020-08-13T03:17:14','2020-08-13T03:17:14','집회','대강당으로모이세여');
 
 insert into member(createdDateTime, modifiedDateTime,studentId , name , groupNum, contact) values('2020-08-13T03:17','2020-08-13T03:17',100100,'kim', 30,'kim@gmail.com' );
@@ -16,5 +17,3 @@ insert into meeting_member(MEETING_ID, MEMBER_ID) values(1,3);
 insert into meeting_member(MEETING_ID, MEMBER_ID) values(2,4);
 insert into meeting_member(MEETING_ID, MEMBER_ID) values(2,5);
 insert into meeting_member(MEETING_ID, MEMBER_ID) values(2,6);
-
-set foreign_key_checks =0;
