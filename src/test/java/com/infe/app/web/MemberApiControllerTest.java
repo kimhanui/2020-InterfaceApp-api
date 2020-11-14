@@ -95,7 +95,7 @@ public class MemberApiControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-        List<Member> members = memberRepository.findAllDesc();
+        List<Member> members = memberRepository.findAllAsc();
         assertThat(members.get(0).getStudentId()).isEqualTo(expectedStudentId);
         assertThat(members.get(0).getName()).isEqualTo(expectedName);
         assertThat(members.get(0).getGroupNum()).isEqualTo(expectedGroupNum);

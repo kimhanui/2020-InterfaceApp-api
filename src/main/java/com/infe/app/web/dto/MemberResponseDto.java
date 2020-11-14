@@ -18,4 +18,14 @@ public class MemberResponseDto {
         this.groupNum = m.getGroupNum();
         this.contact = m.getContact();
     }
+
+    public Member toEntity(){
+        return Member.builder()
+                .id(id)
+                .studentId(studentId)
+                .name(name)
+                .groupNum(groupNum)
+                .contact(contact)
+                .build();
+    }
 }

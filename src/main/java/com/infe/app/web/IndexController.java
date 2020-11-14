@@ -21,7 +21,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model) { //Model: 서버 템플릿엔진(mustache)에서 사용할 수 있는 객체를 저장할 수 있음.
-//        List<PostsListResponseDto> list = postsService.findAllDesc();
+//        List<PostsListResponseDto> list = postsService.findAllAsc();
 //        PostsListResponseDto dto = list.get(0);
 //        log.info("modifiedDate= "+dto.getModifiedDate());
 //        model.addAttribute("posts", list);
