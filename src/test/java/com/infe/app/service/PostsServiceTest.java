@@ -26,13 +26,25 @@ public class PostsServiceTest {
     private PostsService service;
 
 
+    public void 테스트데이터(){
+        String title = "test";
+        String content = "content...hahahah";
+        for(int i=0; i<3;i++){
+            PostsSaveRequestDto dto = PostsSaveRequestDto.builder()
+                                                    .title(title+i)
+                                                    .content(content+i)
+                                                    .build();
+            service.save(dto);
+        }
+    }
+
     @Test
     public void PostsService_findAllDesc() {
+        테스트데이터();
         List<PostsListResponseDto> postsList = service.findAllDesc();
         for (PostsListResponseDto dto : postsList) {
             log.info("[" + dto.getId() + "] " + dto.getModifiedDate());
         }
-
     }
 
     @Test
@@ -61,8 +73,8 @@ public class PostsServiceTest {
         repo.flush();
         PostsResponseDto foundPostsDto = service.findById(id);
         log.info("original: title=" + foundPostsDto.getTitle() + ", content=" + foundPostsDto.getContent());
-        //then
 
+        //then
         assertThat(foundPostsDto.getTitle()).isEqualTo(foundPostsDto.getTitle());
     }
 

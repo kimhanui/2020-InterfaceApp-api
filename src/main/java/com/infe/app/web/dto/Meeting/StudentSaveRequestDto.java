@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.infe.app.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Getter
 public class StudentSaveRequestDto {
     private Long studentId;
     private String name;
     private Long groupNum;
-
     private String passkey;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
 

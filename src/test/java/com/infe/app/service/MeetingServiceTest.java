@@ -3,24 +3,28 @@ package com.infe.app.service;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
 import com.infe.app.domain.member.Member;
+import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.Meeting.MeetingRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
+import com.infe.app.web.dto.MemberResponseDto;
 import lombok.extern.java.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@Transactional //매 @Test마다 롤백시키기위함
 @Log
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,9 +36,28 @@ public class MeetingServiceTest {
     private MeetingService meetingService;
 
     @Test
-    public void saveMeeting() {
+    public void passkey로_찾기() {
         //given
-        String inputValue = "FGA2X";
+        String passkey = "SSD2K";
+        AdminRequestDto dto = AdminRequestDto.builder()
+                .passkey(passkey)
+                .startTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
+                .endTime(LocalDateTime.of(2020, 11, 11, 1, 0, 0))
+                .build();
+
+        //when
+        Long res = -1L;
+        res = meetingService.isExistKey(dto);
+
+        //then
+        assertThat(res).isGreaterThan(0L);
+        log.info(res.toString());
+    }
+
+    @Test
+    public void Meeting_저장() {
+        //given
+        String inputValue = "ZZZZZ";
         Meeting meeting = Meeting.builder()
                 .passkey(inputValue)
                 .createdDateTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
@@ -49,8 +72,23 @@ public class MeetingServiceTest {
         assertThat(inputValue).isEqualTo(resMeeting.getPasskey());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void Meeting중복_예외발생() throws Exception {
+        //given
+
+        String inputValue = "SSD2K";
+        AdminRequestDto meetingDto = AdminRequestDto.builder()
+                .passkey(inputValue)
+                .startTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
+                .endTime(LocalDateTime.of(2020, 11, 11, 1, 0, 0))
+                .build();
+
+        //when, then
+        meetingService.insertMeeting(meetingDto);
+    }
+
     @Test
-    public void 참석자_올바른출석암호_인증성공한다() {
+    public void 참석자_올바른출석암호_인증성공한다() throws TimeoutException {
         //given
         String passkey = "SSD2K";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
@@ -62,21 +100,15 @@ public class MeetingServiceTest {
                 .build();
 
         //then
-        Long resId=0L;
-        try {
-            resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>인증실패..... 암호오류");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>인증실패..... 타임아웃");
-        }
+        Long resId = 0L;
+        resId = meetingService.insertAttendee(dto);
 
         //when
         assertThat(resId).isGreaterThan(0L);
     }
 
-    @Test
-    public void 참석자_틀린출석암호_인증실패한다() {
+    @Test(expected = IllegalArgumentException.class)
+    public void 참석자_틀린출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
         String passkey = "SSD2KKKK";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
@@ -88,17 +120,11 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        try {
-            Long resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>암호오류성공");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>암호오류실패..... 타임아웃");
-        }
+        meetingService.insertAttendee(dto);
     }
 
-    @Test
-    public void 참석자_올바르지만_만료된출석암호_인증실패한다() {
+    @Test(expected = TimeoutException.class)
+    public void 참석자_올바르지만_만료된출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
         String passkey = "SSD2K";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
@@ -110,30 +136,33 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        try {
-            Long resId = meetingService.insertAttendee(dto);
-        }catch(IllegalArgumentException e){
-            log.info(">>>>>>>>타임아웃 실패..... 암호오류");
-        }catch(TimeoutException te){
-            log.info(">>>>>>>>타임아웃 성공");
-        }
+        meetingService.insertAttendee(dto);
     }
 
     @Test
-    public void findAllMemberDesc() {
+    public void findAllMemberAsc() {
         //given
         List<String> names = Arrays.asList("park", "lee", "kim");
         LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
 
         //when
-        List<Member> members = meetingRepository.findAllMemberDesc(dateTime);
+        List<Member> members = meetingRepository.findMembersByDate(dateTime);
 
         //then
-        int i = 0;
+        Long G = 0L, ID = 0L;
+        Long targetG, targetID;
         for (Member m : members) {
-            assertThat(m.getName()).isEqualTo(names.get(i));
-            log.info("[" + m.getId() + "]" + m.getStudentId() + ", " + m.getName());
-            i++;
+            targetG = m.getGroupNum();
+            targetID = m.getStudentId();
+
+            //then
+            assertThat(targetG).isGreaterThanOrEqualTo(G);
+            if (targetG == G) {
+                assertThat(targetID).isGreaterThan(ID);
+            } else if (targetG > G) {
+                G = targetG;
+                ID = targetID;
+            }
         }
     }
 
@@ -143,24 +172,47 @@ public class MeetingServiceTest {
         List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
 
         //then
+        Long targetID, ID = 0L;
+        LocalDateTime targetM, MEETCREATEDTIME = LocalDateTime.MIN;
         for (MemberMeetingResponseDto dto : dtos) {
-            log.info(dto.toString());
+            targetM = dto.getCreatedDateTime();
+            targetID = dto.getStudentId();
+            log.info(targetM + " " + targetID);
+
+            //then
+            assertThat(targetM).isAfterOrEqualTo(MEETCREATEDTIME);
+            if (targetM == MEETCREATEDTIME) {
+                assertThat(targetID).isGreaterThan(ID);
+            } else if (targetM.isAfter(MEETCREATEDTIME)) {
+                MEETCREATEDTIME = LocalDateTime.of(targetM.toLocalDate(), targetM.toLocalTime());
+                ID = targetID;
+            }
         }
     }
 
     @Test
-    public void deleteAllByDate() {
-        //when
+    public void deleteMeetingsByDate() throws IllegalArgumentException {
+        //given
         LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
-        MeetingRequestDto dto = new MeetingRequestDto(dateTime);
-        meetingService.deleteAllByDate(dto);
+        List<Member> memberDtos = meetingService.findMembersByDate(dateTime).stream()
+                .map(MemberResponseDto::toEntity).collect(Collectors.toList());
+        MeetingRequestDto target = new MeetingRequestDto(dateTime);
+
+
+        //when
+        meetingService.deleteByDate(target);
+//        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dateTime).orElse(null);
 
         //then
-        List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
-        Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dateTime).orElse(null);
-        assertThat(meeting).isEqualTo(null);
-        for (MemberMeetingResponseDto dtoi : dtos) {
-            assertThat(dtoi.getCreatedDateTime()).isNotEqualTo(dateTime);
-        }
+//        assertThat(meeting).isEqualTo(null); //meeting 삭제 확인
+//        for (Member dto : memberDtos) { //각 member에서 삭제 확인
+//            List<Meeting> meetings = dto.getMeetings();
+//
+//            log.info("확인 멤버: "+ dto.getName());
+//            for( Meeting m:meetings){
+//                log.info(m.getPasskey()+" "+m.getCreatedDateTime());
+//            }
+//            assertThat(dto.getCreatedDateTime()).isNotEqualTo(dateTime);
+//        }
     }
 }

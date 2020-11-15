@@ -37,11 +37,13 @@ public class MemberApiControllerTest {
         Long STUDENTID = 170170L;
         String NAME = "baron";
         Long GROUPNUM = 30L;
+        String CONTACT = "1234-1234";
 
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(STUDENTID)
                 .name(NAME)
                 .groupNum(GROUPNUM)
+                .contact(CONTACT)
                 .build();
         String url = "http://localhost:" + port + "/api/v1/member";
 
@@ -57,6 +59,7 @@ public class MemberApiControllerTest {
         assertThat(members.get(size - 1).getStudentId()).isEqualTo(STUDENTID);
         assertThat(members.get(size - 1).getName()).isEqualTo(NAME);
         assertThat(members.get(size - 1).getGroupNum()).isEqualTo(GROUPNUM);
+        assertThat(members.get(size - 1).getContact()).isEqualTo(CONTACT);
     }
 
     @Test
@@ -66,16 +69,19 @@ public class MemberApiControllerTest {
                 .studentId(999999L)
                 .name("kim-before")
                 .groupNum(1L)
+                .contact("1234-1234")
                 .build());
         Long targetId = savedMember.getId();
         Long expectedStudentId = 999999L;
         String expectedName = "kim-after";
-        Long expedtedGroupNum = 2L;
+        Long expectedGroupNum = 2L;
+        String expectedContact = "1234-1234";
 
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .studentId(expectedStudentId)
                 .name(expectedName)
-                .groupNum(expedtedGroupNum)
+                .groupNum(expectedGroupNum)
+                .contact(expectedContact)
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/member/" + targetId;
@@ -89,9 +95,10 @@ public class MemberApiControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-        List<Member> members = memberRepository.findAllDesc();
+        List<Member> members = memberRepository.findAllAsc();
         assertThat(members.get(0).getStudentId()).isEqualTo(expectedStudentId);
         assertThat(members.get(0).getName()).isEqualTo(expectedName);
-        assertThat(members.get(0).getGroupNum()).isEqualTo(expedtedGroupNum);
+        assertThat(members.get(0).getGroupNum()).isEqualTo(expectedGroupNum);
+        assertThat(members.get(0).getContact()).isEqualTo(expectedContact);
     }
 }

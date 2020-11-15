@@ -2,7 +2,6 @@ language: java
 jdk:
   - openjdk8
 
-#only 밑엔 하나만 써야함.
 branches:
   only:
     - dev
