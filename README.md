@@ -1,4 +1,4 @@
-# 2020-InterfaceApp-api  [![Build Status](https://travis-ci.com/kimhanui/2020-InterfaceApp-api.svg?branch=dev)](https://travis-ci.com/kimhanui/2020-InterfaceApp-api) [![Coverage Status](https://coveralls.io/repos/github/kimhanui/2020-InterfaceApp-api/badge.svg?branch=dev)](https://coveralls.io/github/kimhanui/2020-InterfaceApp-api?branch=dev)
+# 2020-InterfaceApp-api  [![Build Status](https://travis-ci.com/kimhanui/2020-InterfaceApp-api.svg?branch=dev)](https://travis-ci.com/kimhanui/2020-InterfaceApp-api) [![Coverage Status](https://coveralls.io/repos/github/kimhanui/2020-InterfaceApp-api/badge.svg?branch=master)](https://coveralls.io/github/kimhanui/2020-InterfaceApp-api?branch=master)
 App for computer study club "Interface".
 ### main function: notice, member list
 > member: jkey20(android), kimhanui(backend, server)
