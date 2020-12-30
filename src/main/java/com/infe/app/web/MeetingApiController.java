@@ -31,20 +31,27 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     @PostMapping("/api/v1/meet/findMeeting")
-    public Long isMeetingExist(@RequestBody AdminRequestDto dto) {
-        return meetingService.isExistKey(dto);
+    public ResponseEntity<String> isMeetingExist(@RequestBody AdminRequestDto dto) {
+        try{
+            Long res = meetingService.isExistKey(dto);
+            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/api/v1/meet/userCheck")
     public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) {
-
+        log.info("MeetingCont: time ="+dto.getDateTime());
         try {
             Long resId = meetingService.insertAttendee(dto);
             return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("잘못된 출석암호입니다..", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (TimeoutException te) {
-            return new ResponseEntity<>("만료된 출석암호입니다..", HttpStatus.UNAUTHORIZED);
+            log.info(te.getMessage());
+            return new ResponseEntity<>(te.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 

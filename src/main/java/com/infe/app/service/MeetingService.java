@@ -56,18 +56,25 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findMeetingByPasskey(dto.getPasskey())
                 .orElseThrow(() -> new IllegalArgumentException("출석하려는 모임이 없습니다."));
 
+        //회원 조회
+        Member member = memberRepository.findByStudentId(dto.getStudentId()).orElseThrow(()->new IllegalArgumentException("찾는 회원이 없습니다."));
+
         //dateTime확인
         LocalDateTime meetingStart = meeting.getCreatedDateTime();
         LocalDateTime meetingEnd = meeting.getEndDateTime();
         LocalDateTime inputTime = dto.getDateTime();
-        Member member = null;
 
         if (inputTime.isAfter(meetingStart) && inputTime.isBefore(meetingEnd)) {
-            member = dto.toMember();
-            meeting.addMember(member);
-            memberRepository.save(member);
+            //회원 중복으로 출석 방어
+            if( meeting.getMembers().contains(member))
+            {
+                throw new IllegalArgumentException("이미 출석되었습니다.");
+            }
+            else { //출석체크처리
+                meeting.addMember(member); //Meeting - Member서로 추가해줌
+            }
         } else {
-            throw new TimeoutException();
+            throw new TimeoutException("출석키가 만료되었습니다.");
         }
         return member.getId();
     }
