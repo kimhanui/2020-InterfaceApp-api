@@ -91,15 +91,15 @@ public class MeetingService {
     }
 
     @Transactional
-    public void deleteByDate(MeetingRequestDto dto) throws IllegalArgumentException {
+    public Long deleteByDate(MeetingRequestDto dto) throws IllegalArgumentException {
         Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dto.getDateTime())
                 .orElseThrow(() -> new IllegalArgumentException("찾는 모임이 없습니다."));
-
+        Long id =meeting.getId();
 
         List<Member> members = meetingRepository.findMembersByDate(dto.getDateTime());
-
         memberRepository.deleteAll(members);
         meetingRepository.delete(meeting);
+        return id;
     }
 
 }

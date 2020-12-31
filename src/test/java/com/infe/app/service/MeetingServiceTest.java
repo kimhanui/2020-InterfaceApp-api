@@ -90,13 +90,13 @@ public class MeetingServiceTest {
     @Test
     public void 참석자_올바른출석암호_인증성공한다() throws TimeoutException {
         //given
-        String passkey = "SSD2K";
+        String passkey = "VJ5FG";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
+                .studentId(100100L)
+                .name("kim")
                 .groupNum(30L)
                 .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
+                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
                 .build();
 
         //then
@@ -112,11 +112,11 @@ public class MeetingServiceTest {
         //given
         String passkey = "SSD2KKKK";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
+                .studentId(100100L)
+                .name("kim")
                 .groupNum(30L)
                 .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 0, 30, 0))
+                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
                 .build();
 
         //then, when
@@ -126,10 +126,10 @@ public class MeetingServiceTest {
     @Test(expected = TimeoutException.class)
     public void 참석자_올바르지만_만료된출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
-        String passkey = "SSD2K";
+        String passkey = "VJ5FG";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(110110L)
-                .name("MOMO")
+                .studentId(100100L)
+                .name("kim")
                 .groupNum(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
