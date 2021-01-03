@@ -42,7 +42,7 @@ public class MemberApiControllerTest {
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(STUDENTID)
                 .name(NAME)
-                .groupNum(GROUPNUM)
+                .generation(GROUPNUM)
                 .contact(CONTACT)
                 .build();
         String url = "http://localhost:" + port + "/api/v1/member";
@@ -58,7 +58,7 @@ public class MemberApiControllerTest {
         int size = members.size();
         assertThat(members.get(size - 1).getStudentId()).isEqualTo(STUDENTID);
         assertThat(members.get(size - 1).getName()).isEqualTo(NAME);
-        assertThat(members.get(size - 1).getGroupNum()).isEqualTo(GROUPNUM);
+        assertThat(members.get(size - 1).getGeneration()).isEqualTo(GROUPNUM);
         assertThat(members.get(size - 1).getContact()).isEqualTo(CONTACT);
     }
 
@@ -68,7 +68,7 @@ public class MemberApiControllerTest {
         Member savedMember = memberRepository.save(Member.builder()
                 .studentId(999999L)
                 .name("kim-before")
-                .groupNum(1L)
+                .generation(1L)
                 .contact("1234-1234")
                 .build());
         Long targetId = savedMember.getId();
@@ -80,7 +80,7 @@ public class MemberApiControllerTest {
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .studentId(expectedStudentId)
                 .name(expectedName)
-                .groupNum(expectedGroupNum)
+                .generation(expectedGroupNum)
                 .contact(expectedContact)
                 .build();
 
@@ -98,7 +98,7 @@ public class MemberApiControllerTest {
         List<Member> members = memberRepository.findAllAsc();
         assertThat(members.get(0).getStudentId()).isEqualTo(expectedStudentId);
         assertThat(members.get(0).getName()).isEqualTo(expectedName);
-        assertThat(members.get(0).getGroupNum()).isEqualTo(expectedGroupNum);
+        assertThat(members.get(0).getGeneration()).isEqualTo(expectedGroupNum);
         assertThat(members.get(0).getContact()).isEqualTo(expectedContact);
     }
 }

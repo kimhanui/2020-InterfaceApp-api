@@ -21,7 +21,7 @@ public class MemberMeetingResponseDto {
         this.id = m.getId();
         this.studentId = m.getStudentId();
         this.name = m.getName();
-        this.groupNum = m.getGroupNum();
+        this.groupNum = m.getGeneration();
         this.passkey = mt.getPasskey();
         this.createdDateTime = mt.getCreatedDateTime();
     }

@@ -37,7 +37,7 @@ public class MemberServiceTest {
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(17000000L)
                 .name("lee")
-                .groupNum(31L)
+                .generation(31L)
                 .contact("010-0000-0000")
                 .build();
         memberRepository.save(dto.toEntity());
@@ -55,7 +55,7 @@ public class MemberServiceTest {
 
         //when
         for(MemberResponseDto dto: dtos){
-            targetG=dto.getGroupNum();
+            targetG=dto.getGeneration();
             targetID=dto.getStudentId();
 
             //then

@@ -27,20 +27,30 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     @Column(nullable = false)
-    private Long groupNum; //기수
+    private Long generation; //기수
 
     @Column
     private String contact;
+
+    @Column
+    private String phone;
+
+    @Column
+    private String department;
+
+    @Embedded
+    private ManageStatus manageStatus;
 
     @ManyToMany(mappedBy = "members")
     private List<Meeting> meetings = new ArrayList<>();
 
     @Builder
-    public Member(Long id, Long studentId, String name, Long groupNum, String contact) {
+    public Member(Long id, Long studentId, String name, Long generation,
+                  String contact) {
         this.id = id;
         this.studentId = studentId;
         this.name = name;
-        this.groupNum = groupNum;
+        this.generation = generation;
         this.contact = contact;
     }
 
@@ -52,8 +62,7 @@ public class Member extends BaseTimeEntity {
     public void update(MemberRequestDto dto) {
         this.studentId = dto.getStudentId();
         this.name =dto.getName();
-        this.groupNum = dto.getGroupNum();
+        this.generation = dto.getGeneration();
         this.contact = dto.getContact();
     }
-
 }

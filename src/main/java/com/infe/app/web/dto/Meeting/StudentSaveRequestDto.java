@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class StudentSaveRequestDto {
     private Long studentId;
     private String name;
-    private Long groupNum;
+    private Long generation;
     private String passkey;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
@@ -23,16 +23,16 @@ public class StudentSaveRequestDto {
         return Member.builder()
                 .studentId(studentId)
                 .name(name)
-                .groupNum(groupNum)
+                .generation(generation)
                 .build();
     }
 
     @Builder
-    public StudentSaveRequestDto(Long studentId, String name, Long groupNum,
+    public StudentSaveRequestDto(Long studentId, String name, Long generation,
                                  String passkey, LocalDateTime dateTime) {
         this.studentId = studentId;
         this.name = name;
-        this.groupNum = groupNum;
+        this.generation = generation;
         this.passkey = passkey;
         this.dateTime = dateTime;
     }

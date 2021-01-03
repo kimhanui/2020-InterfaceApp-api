@@ -94,7 +94,7 @@ public class MeetingServiceTest {
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
-                .groupNum(30L)
+                .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
                 .build();
@@ -114,7 +114,7 @@ public class MeetingServiceTest {
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
-                .groupNum(30L)
+                .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
                 .build();
@@ -130,7 +130,7 @@ public class MeetingServiceTest {
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
-                .groupNum(30L)
+                .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
                 .build();
@@ -152,7 +152,7 @@ public class MeetingServiceTest {
         Long G = 0L, ID = 0L;
         Long targetG, targetID;
         for (Member m : members) {
-            targetG = m.getGroupNum();
+            targetG = m.getGeneration();
             targetID = m.getStudentId();
 
             //then

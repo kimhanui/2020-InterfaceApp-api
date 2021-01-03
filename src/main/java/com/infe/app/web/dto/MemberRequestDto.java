@@ -11,23 +11,23 @@ public class MemberRequestDto {
 
     private Long studentId;
     private String name;
-    private Long groupNum;
+    private Long generation;
     private String contact;
 
     public Member toEntity(){
         return Member.builder()
                 .studentId(studentId)
                 .name(name)
-                .groupNum(groupNum)
+                .generation(generation)
                 .contact(contact)
                 .build();
     }
 
     @Builder
-    public MemberRequestDto(Long studentId, String name, Long groupNum, String contact){
+    public MemberRequestDto(Long studentId, String name, Long generation, String contact){
         this.studentId = studentId;
         this.name = name;
-        this.groupNum = groupNum;
+        this.generation = generation;
         this.contact = contact;
     }
 }
