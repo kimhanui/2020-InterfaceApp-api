@@ -35,6 +35,8 @@ public class MeetingServiceTest {
     @Autowired
     private MeetingService meetingService;
 
+    private final Double lat = 33.33;
+    private final Double lon = 22.22;
     @Test
     public void passkey로_찾기() {
         //given
@@ -62,6 +64,8 @@ public class MeetingServiceTest {
                 .passkey(inputValue)
                 .createdDateTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
                 .endDateTime(LocalDateTime.of(2020, 11, 11, 1, 0, 0))
+                .lat(lat)
+                .lon(lon)
                 .build();
 
         //when
@@ -81,6 +85,8 @@ public class MeetingServiceTest {
                 .passkey(inputValue)
                 .startTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
                 .endTime(LocalDateTime.of(2020, 11, 11, 1, 0, 0))
+                .lat(lat)
+                .lon(lon)
                 .build();
 
         //when, then
@@ -97,6 +103,8 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .lat(lat)
+                .lon(lon)
                 .build();
 
         //then
@@ -106,6 +114,25 @@ public class MeetingServiceTest {
         //when
         assertThat(resId).isGreaterThan(0L);
     }
+
+    @Test(expected =IllegalArgumentException.class)
+    public void 참석자_회원정보불일치_인증실패() throws IllegalArgumentException, TimeoutException {
+        //given
+        String passkey = "VJ5FG";
+        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+                .studentId(100100L)
+                .name("WrongKim")
+                .generation(30L)
+                .passkey(passkey)
+                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .lat(lat)
+                .lon(lon)
+                .build();
+
+        //then, when
+        meetingService.insertAttendee(dto);
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void 참석자_틀린출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
@@ -117,6 +144,8 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .lat(lat)
+                .lon(lon)
                 .build();
 
         //then, when
@@ -133,6 +162,8 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
+                .lat(lat)
+                .lon(lon)
                 .build();
 
         //then, when
@@ -142,6 +173,7 @@ public class MeetingServiceTest {
     @Test(expected=IllegalArgumentException.class)
     public void 참석자_위치인증오류_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
+        Double wrongLat = 55.55;
         String passkey = "VJ5FG";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
                 .studentId(100100L)
@@ -149,8 +181,8 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
-                .lat(55.55)
-                .lon(22.22)
+                .lat(wrongLat)
+                .lon(lon)
                 .build();
 
         //then, when

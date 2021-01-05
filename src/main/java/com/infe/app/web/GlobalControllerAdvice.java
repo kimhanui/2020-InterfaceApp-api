@@ -28,7 +28,7 @@ public class GlobalControllerAdvice {
     protected ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         log.warning("IllegalArgumentException: " + e);
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({TimeoutException.class})
@@ -38,11 +38,18 @@ public class GlobalControllerAdvice {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler({NullPointerException.class})
+    protected ResponseEntity<String> handleTimeoutException(NullPointerException e) {
+        log.warning("TimeoutException: " + e);
+
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<String> handleException(Exception e) {
         log.warning("Exception: " + e);
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }
