@@ -23,10 +23,14 @@ public class Meeting {
 
     private String passkey;
 
+    private Double lat;
+
+    private Double lon;
+
     @ManyToMany
-    @JoinTable(name = "MEETING_MEMBER",
-            joinColumns = @JoinColumn(name = "MEETING_ID"),
-            inverseJoinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @JoinTable(name = "meeting_member",
+            joinColumns = @JoinColumn(name = "meeting_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id"))
     private List<Member> members = new ArrayList<>();
 
     @CreatedDate
@@ -35,8 +39,10 @@ public class Meeting {
     private LocalDateTime endDateTime;
 
     @Builder
-    public Meeting(String passkey, LocalDateTime createdDateTime, LocalDateTime endDateTime) {
+    public Meeting(String passkey,Double lat, Double lon, LocalDateTime createdDateTime, LocalDateTime endDateTime) {
         this.passkey = passkey;
+        this.lat = lat;
+        this.lon = lon;
         this.createdDateTime = createdDateTime;
         this.endDateTime = endDateTime;
     }

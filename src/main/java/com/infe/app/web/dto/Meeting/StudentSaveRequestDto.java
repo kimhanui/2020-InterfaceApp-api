@@ -15,6 +15,8 @@ public class StudentSaveRequestDto {
     private String name;
     private Long generation;
     private String passkey;
+    private Double lat;
+    private Double lon;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime dateTime;
@@ -29,11 +31,13 @@ public class StudentSaveRequestDto {
 
     @Builder
     public StudentSaveRequestDto(Long studentId, String name, Long generation,
-                                 String passkey, LocalDateTime dateTime) {
+                                 String passkey, LocalDateTime dateTime, Double lat, Double lon) {
         this.studentId = studentId;
         this.name = name;
         this.generation = generation;
         this.passkey = passkey;
         this.dateTime = dateTime;
+        this.lat = lat;
+        this.lon = lon;
     }
 }

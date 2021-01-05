@@ -12,15 +12,18 @@ import java.time.LocalDateTime;
 public class AdminRequestDto {
 
     private String passkey;
-
+    private Double lat;
+    private Double lon;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endTime;
 
     @Builder
-    public AdminRequestDto(String passkey, LocalDateTime startTime, LocalDateTime endTime){
+    public AdminRequestDto(String passkey,Double lat, Double lon, LocalDateTime startTime, LocalDateTime endTime){
         this.passkey = passkey;
+        this.lat = lat;
+        this.lon = lon;
         this.startTime = startTime;
         this.endTime = endTime;
     }

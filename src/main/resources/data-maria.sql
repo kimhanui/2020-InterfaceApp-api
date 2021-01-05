@@ -1,11 +1,17 @@
 insert into posts(created_date_time, modified_date_time,title, content) values ('2020-08-13T03:17:14','2020-08-13T03:17:14','집회','대강당으로모이세여');
 
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17','2020-08-13T03:17',100100,'kim', 30 ,'kim@gmail.com' );
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17:14','2020-08-13T03:17:14',200200,'lee', 30, '010-2222-3333');
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17:14','2020-08-13T03:17:14',300300,'park', 30, 'pp@kakao.com');
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17:14','2020-08-13T03:17:14',400400,'yun', 30 , '010-3333-4444');
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17:14','2020-08-13T03:17:14',500500,'lim', 30 ,'010-4444-5555' );
-insert into member(created_date_time, modified_date_time,student_id , name , group_num, contact) values('2020-08-13T03:17:14','2020-08-13T03:17:14',600600,'oh', 30, '010-5555-6666');
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17','2020-08-13T03:17',100100,'kim', 30 ,'kim@gmail.com','010-2222-2222','ATTENDING','true','Y','Y','Y','Y');
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17:14','2020-08-13T03:17:14',200200,'lee', 30, 'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y' );
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17:14','2020-08-13T03:17:14',300300,'park', 30, 'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y');
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17:14','2020-08-13T03:17:14',400400,'yun', 30 , 'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y');
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17:14','2020-08-13T03:17:14',500500,'lim', 30 ,'kim@gmail.com' ,'010-2222-2222','ATTENDING','Y','Y','Y','Y');
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, attending_status,first_dues ,second_dues,opening_meeting,final_meeting)
+values('2020-08-13T03:17:14','2020-08-13T03:17:14',600600,'oh', 30, 'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y');
 
 insert into meeting(passkey ,created_date_time,end_date_time) values('SSD2K','2020-11-11T00:00:00','2020-11-11T01:00:00');
 insert into meeting(passkey ,created_date_time,end_date_time) values('VJ5FG','2020-09-09T00:00:00','2020-09-09T01:00:00');

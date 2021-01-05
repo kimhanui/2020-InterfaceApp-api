@@ -124,7 +124,7 @@ public class MeetingServiceTest {
     }
 
     @Test(expected = TimeoutException.class)
-    public void 참석자_올바르지만_만료된출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
+    public void 참석자_만료된출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
         String passkey = "VJ5FG";
         StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
@@ -133,6 +133,24 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
+                .build();
+
+        //then, when
+        meetingService.insertAttendee(dto);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void 참석자_위치인증오류_인증실패한다() throws IllegalArgumentException, TimeoutException {
+        //given
+        String passkey = "VJ5FG";
+        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+                .studentId(100100L)
+                .name("kim")
+                .generation(30L)
+                .passkey(passkey)
+                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .lat(55.55)
+                .lon(22.22)
                 .build();
 
         //then, when

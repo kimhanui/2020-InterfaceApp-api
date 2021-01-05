@@ -4,10 +4,10 @@ import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.Meeting.MeetingRequestDto;
 import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
-import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -36,6 +36,8 @@ public class MeetingService {
 
         Meeting meeting = Meeting.builder()
                 .passkey(dto.getPasskey())
+                .lat(dto.getLat())
+                .lon(dto.getLon())
                 .createdDateTime(dto.getStartTime())
                 .endDateTime(dto.getEndTime())
                 .build();
@@ -43,39 +45,42 @@ public class MeetingService {
     }
 
     @Transactional
-    public Long isExistKey(AdminRequestDto dto) throws IllegalArgumentException{
+    public Long isExistKey(AdminRequestDto dto) throws IllegalArgumentException {
         Meeting meeting = meetingRepository.findMeetingByPasskey(dto.getPasskey())
-                .orElseThrow(() -> new IllegalArgumentException("찾는 모임이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
         return meeting.getId();
     }
 
     @Transactional
-    public Long insertAttendee(StudentSaveRequestDto dto) throws IllegalArgumentException, TimeoutException { //연관관계 편의 메소드: 사용하기
-
-        //passkey확인(반드시 한개만 나오므로)
+    public Long insertAttendee(StudentSaveRequestDto dto) throws IllegalArgumentException, TimeoutException {
+        //passkey 확인
         Meeting meeting = meetingRepository.findMeetingByPasskey(dto.getPasskey())
-                .orElseThrow(() -> new IllegalArgumentException("출석하려는 모임이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
 
-        //회원 조회
-        Member member = memberRepository.findByStudentId(dto.getStudentId()).orElseThrow(()->new IllegalArgumentException("찾는 회원이 없습니다."));
+        //회원 확인
+        Member member = memberRepository.findByStudentId(dto.getStudentId()).
+                orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 입니다."));
 
-        //dateTime확인
+        //회원 중복 확인
+        if (meeting.getMembers().contains(member)) {
+            throw new IllegalArgumentException("이미 출석되었습니다.");
+        }
+
+        //출석키 만료 확인
         LocalDateTime meetingStart = meeting.getCreatedDateTime();
         LocalDateTime meetingEnd = meeting.getEndDateTime();
         LocalDateTime inputTime = dto.getDateTime();
-
-        if (inputTime.isAfter(meetingStart) && inputTime.isBefore(meetingEnd)) {
-            //회원 중복으로 출석 방어
-            if( meeting.getMembers().contains(member))
-            {
-                throw new IllegalArgumentException("이미 출석되었습니다.");
-            }
-            else { //출석체크처리
-                meeting.addMember(member); //Meeting - Member서로 추가해줌
-            }
-        } else {
+        if (!(inputTime.isAfter(meetingStart) && inputTime.isBefore(meetingEnd)))
             throw new TimeoutException("출석키가 만료되었습니다.");
+
+        //위치 확인
+        if (!(Double.compare(dto.getLat(), meeting.getLat()) == 0 && Double.compare(dto.getLon(), meeting.getLon()) == 0)) {
+            throw new IllegalArgumentException("출석 위치가 다릅니다.");
         }
+
+        //출석체크처리
+        meeting.addMember(member); //Meeting-Member 서로 추가해줌
+
         return member.getId();
     }
 
@@ -93,8 +98,8 @@ public class MeetingService {
     @Transactional
     public Long deleteByDate(MeetingRequestDto dto) throws IllegalArgumentException {
         Meeting meeting = meetingRepository.findMeetingsByCreatedDateTime(dto.getDateTime())
-                .orElseThrow(() -> new IllegalArgumentException("찾는 모임이 없습니다."));
-        Long id =meeting.getId();
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
+        Long id = meeting.getId();
 
         List<Member> members = meetingRepository.findMembersByDate(dto.getDateTime());
         memberRepository.deleteAll(members);
