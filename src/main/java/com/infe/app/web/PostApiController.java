@@ -19,32 +19,32 @@ public class PostApiController {
      * */
     //url에 insert, update,,넣지 않고 HttpMethod로 Post, Put, Get, Delete구분...
     @PostMapping("/api/v1/posts")
-    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+    public Long save(@RequestBody PostsSaveRequestDto requestDto)throws Exception {
         return postsService.save(requestDto);
     }
 
     @PutMapping("/api/v1/posts/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto){
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) throws Exception{
         return postsService.update(id, requestDto);
     }
 
     @GetMapping("/api/v1/posts/{id}")
-    public PostsResponseDto findById(@PathVariable Long id){
+    public PostsResponseDto findById(@PathVariable Long id)throws Exception{
         return postsService.findById(id);
     }
 
     @GetMapping("/api/v1/posts/list")
-    public List<PostsListResponseDto> findAll(){
+    public List<PostsListResponseDto> findAll() throws Exception{
         return postsService.findAllDesc();
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
-    public void delete(@PathVariable Long id){
-        postsService.delete(id);
+    public Long delete(@PathVariable Long id)throws Exception{
+        return postsService.delete(id);
     }
 
     @DeleteMapping("/api/v1/posts/all")
-    public void deleteAll(){
-        postsService.deleteAll();
+    public Long deleteAll()throws Exception{
+        return postsService.deleteAll();
     }
 }

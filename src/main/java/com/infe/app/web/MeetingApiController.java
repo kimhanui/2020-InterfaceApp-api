@@ -26,46 +26,35 @@ public class MeetingApiController { //0000으로 초기화?
     private final MeetingService meetingService;
 
     @PostMapping("/api/v1/meet/insert")
-    public Long insertMeeting(@RequestBody AdminRequestDto dto) {
+    public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
         return meetingService.insertMeeting(dto);
     }
 
     @PostMapping("/api/v1/meet/findMeeting")
-    public Long isMeetingExist(@RequestBody AdminRequestDto dto) {
-        return meetingService.isExistKey(dto);
+    public ResponseEntity<String> isMeetingExist(@RequestBody AdminRequestDto dto) throws Exception {
+        Long res = meetingService.isExistKey(dto);
+        return new ResponseEntity<>(res.toString(), HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/meet/userCheck")
-    public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) {
-
-        try {
-            Long resId = meetingService.insertAttendee(dto);
-            return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("잘못된 출석암호입니다..", HttpStatus.BAD_REQUEST);
-        } catch (TimeoutException te) {
-            return new ResponseEntity<>("만료된 출석암호입니다..", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) throws Exception{
+        Long resId = meetingService.insertAttendee(dto);
+        return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/meet/userList") //날짜별
-    public List<MemberResponseDto> findAllMemberByDate(@RequestBody MeetingRequestDto dto) {
+    public List<MemberResponseDto> findAllMemberByDate(@RequestBody MeetingRequestDto dto)throws Exception {
         return meetingService.findMembersByDate(dto.getDateTime());
     }
 
     @GetMapping("/api/v1/meet/userList")
-    public List<MemberMeetingResponseDto> findAllMember() {
+    public List<MemberMeetingResponseDto> findAllMember()throws Exception {
         return meetingService.findAllMember();
     }
 
     //삭제 모호 - 날짜별 출석한 학생 삭제
     @PostMapping("/api/v1/meet/deleteAll") //날짜별
-    public ResponseEntity<String> deleteAllMember(@RequestBody MeetingRequestDto dto) {
-        try {
-            meetingService.deleteByDate(dto);
-            return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public Long deleteAllMember(@RequestBody MeetingRequestDto dto) throws Exception{
+        return meetingService.deleteByDate(dto);
     }
 }

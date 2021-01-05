@@ -18,12 +18,12 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     Optional<Meeting> findMeetingsByCreatedDateTime(LocalDateTime dateTime);
 
     @Query(value = "select m from Member m Join m.meetings mt " +
-            "where mt.createdDateTime = :dateTime order By m.groupNum ASC, m.studentId ASC")
+            "where mt.createdDateTime = :dateTime order By m.generation ASC, m.studentId ASC")
     List<Member> findMembersByDate(@Param("dateTime")LocalDateTime dateTime);
 
     //member와 meeting 조인 조회
     @Query(value = "select new com.infe.app.web.dto.Meeting.MemberMeetingResponseDto(m,mt) " +
             "from Member m Join m.meetings mt " +
-            "order by mt.createdDateTime ASC, m.groupNum ASC, m.studentId ASC")
+            "order by mt.createdDateTime ASC, m.generation ASC, m.studentId ASC")
     List<MemberMeetingResponseDto> findAllMember();
 }

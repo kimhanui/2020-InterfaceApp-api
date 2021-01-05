@@ -16,29 +16,27 @@ public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping("/api/v1/member")
-    public Long insert(@RequestBody MemberRequestDto dto) {
+    public Long insert(@RequestBody MemberRequestDto dto) throws Exception{
         return memberService.insert(dto);
     }
 
     @PutMapping("/api/v1/member/{id}")
-    public Long update(@PathVariable Long id, @RequestBody MemberRequestDto dto) {
+    public Long update(@PathVariable Long id, @RequestBody MemberRequestDto dto)throws Exception {
         return memberService.update(id, dto);
     }
 
     @GetMapping("/api/v1/member/{id}")
-    public MemberResponseDto find(@PathVariable Long id) {
+    public MemberResponseDto find(@PathVariable Long id)throws Exception {
         return memberService.find(id);
     }
 
     @GetMapping("/api/v1/member/list")
-    public List<MemberResponseDto> findAll() {
+    public List<MemberResponseDto> findAll()throws Exception {
         return memberService.findAll();
     }
 
     @DeleteMapping("/api/v1/member/{id}")
-    public void delete(@PathVariable Long id) {
-        memberService.delete(id);
+    public Long delete(@PathVariable Long id)throws Exception {
+        return memberService.delete(id);
     }
-
-
 }

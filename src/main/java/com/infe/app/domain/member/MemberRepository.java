@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("select m from Member m Order By m.groupNum ASC, m.studentId ASC")
+    @Query("select m from Member m Order By m.generation ASC, m.studentId ASC")
     List<Member> findAllAsc();
 
     Optional<Member> findByStudentId(Long studentId);

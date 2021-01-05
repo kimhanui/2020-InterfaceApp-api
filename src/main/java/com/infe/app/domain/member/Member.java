@@ -1,7 +1,7 @@
 package com.infe.app.domain.member;
 
-import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.BaseTimeEntity;
+import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.web.dto.MemberRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,33 +27,48 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     @Column(nullable = false)
-    private Long groupNum; //기수
+    private Long generation; //기수
 
-    @Column
     private String contact;
+
+    private String phone;
+
+    private String department;
+
+    /**
+     * 참석기록
+     **/
+    @Embedded
+    private ManageStatus manageStatus;
 
     @ManyToMany(mappedBy = "members")
     private List<Meeting> meetings = new ArrayList<>();
 
     @Builder
-    public Member(Long id, Long studentId, String name, Long groupNum, String contact) {
+    public Member(Long id, Long studentId, String name, Long generation,
+                  String contact, String phone, String department, ManageStatus manageStatus) {
         this.id = id;
         this.studentId = studentId;
         this.name = name;
-        this.groupNum = groupNum;
+        this.generation = generation;
         this.contact = contact;
+        this.phone = phone;
+        this.department = department;
+        this.manageStatus = manageStatus;
     }
 
-    public void addMeeting(Meeting meeting){
+    public void addMeeting(Meeting meeting) {
         meetings.add(meeting);
         meeting.getMembers().add(this);
     }
 
     public void update(MemberRequestDto dto) {
         this.studentId = dto.getStudentId();
-        this.name =dto.getName();
-        this.groupNum = dto.getGroupNum();
+        this.name = dto.getName();
+        this.generation = dto.getGeneration();
         this.contact = dto.getContact();
+        this.phone = dto.getPhone();
+        this.department = dto.getDepartment();
+        this.manageStatus = dto.getManageStatus();
     }
-
 }

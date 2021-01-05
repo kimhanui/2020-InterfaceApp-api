@@ -1,5 +1,7 @@
 package com.infe.app.service;
 
+import com.infe.app.domain.member.ManageStatus;
+import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
 import com.infe.app.web.dto.MemberRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
@@ -27,18 +29,41 @@ public class MemberServiceTest {
     MemberService memberService;
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         memberRepository.deleteAll();
     }
 
+    @Test
+    public void 참석여부_BooleanToYNConverter_정상작동() {
+        //given
+        ManageStatus manageStatus = new ManageStatus(ManageStatus.State.ATTENDING);
+        MemberRequestDto dto = MemberRequestDto.builder()
+                .studentId(17000000L)
+                .name("lee")
+                .generation(31L)
+                .contact("kim@gmail.com")
+                .phone("010-1111-2222")
+                .manageStatus(manageStatus)
+                .build();
+
+        //when
+        memberRepository.save(dto.toEntity());
+
+        //then
+        Member target = memberRepository.findByStudentId(17000000L).get();
+        log.info(target.getManageStatus().toString());
+        assertThat(target.getManageStatus().isFirstDues()).isEqualTo(false);
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void 회원중복_예외_발생한다() throws IllegalArgumentException{
+    public void 회원중복_예외_발생한다() throws IllegalArgumentException {
         //given
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(17000000L)
                 .name("lee")
-                .groupNum(31L)
-                .contact("010-0000-0000")
+                .generation(31L)
+                .contact("kim@gmail.com")
+                .phone("010-1111-2222")
                 .build();
         memberRepository.save(dto.toEntity());
 
@@ -47,23 +72,22 @@ public class MemberServiceTest {
     }
 
     @Test
-    public void 회원_findAll_오름차순(){
+    public void 회원_findAll_오름차순() {
         //given
         List<MemberResponseDto> dtos = memberService.findAll();
-        long G=0L, ID=0L;
+        long G = 0L, ID = 0L;
         long targetG, targetID;
 
         //when
-        for(MemberResponseDto dto: dtos){
-            targetG=dto.getGroupNum();
-            targetID=dto.getStudentId();
+        for (MemberResponseDto dto : dtos) {
+            targetG = dto.getGeneration();
+            targetID = dto.getStudentId();
 
             //then
             assertThat(targetG).isGreaterThanOrEqualTo(G);
-            if(targetG == G){
+            if (targetG == G) {
                 assertThat(targetID).isGreaterThan(ID);
-            }
-            else if(targetG > G){
+            } else if (targetG > G) {
                 G = targetG;
                 ID = targetID;
             }
