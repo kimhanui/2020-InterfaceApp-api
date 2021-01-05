@@ -4,12 +4,15 @@ import com.infe.app.converter.BooleanToYNConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+@ToString
+@Getter
 @NoArgsConstructor
 @Embeddable
 public class ManageStatus {
@@ -18,6 +21,7 @@ public class ManageStatus {
     @Enumerated(EnumType.STRING)
     private State attendingStatus = State.ATTENDING; //재학(기본), 휴학, 군휴학
 
+    @Getter
     @Convert(converter = BooleanToYNConverter.class)
     private boolean firstDues = false; //회비 납부 여부
     @Convert(converter = BooleanToYNConverter.class)
@@ -26,6 +30,10 @@ public class ManageStatus {
     private boolean openingMeeting= false; //개총 참석 여부
     @Convert(converter = BooleanToYNConverter.class)
     private boolean finalMeeting= false; //종총 참석 여부
+
+    public ManageStatus(State type){
+        attendingStatus = type;
+    }
 
     /**
      * enum: AA("key1","key2","key3")으로 지정하고
