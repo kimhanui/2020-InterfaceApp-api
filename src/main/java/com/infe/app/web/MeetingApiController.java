@@ -2,59 +2,59 @@ package com.infe.app.web;
 
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
-import com.infe.app.web.dto.Meeting.MeetingRequestDto;
-import com.infe.app.web.dto.Meeting.MemberMeetingResponseDto;
+import com.infe.app.web.dto.Meeting.CheckedMemberResponseDto;
+import com.infe.app.web.dto.Meeting.MeetingResponseDto;
 import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
-import com.infe.app.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @Log
+@RequestMapping("/api/v1/meet/**")
 @RequiredArgsConstructor
 @RestController
 public class MeetingApiController { //0000으로 초기화?
 
     private final MeetingService meetingService;
 
-    @PostMapping("/api/v1/meet/insert")
+    @PostMapping("/insert")
     public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
         return meetingService.insertMeeting(dto);
     }
 
-    @PostMapping("/api/v1/meet/findMeeting")
-    public ResponseEntity<String> isMeetingExist(@RequestBody AdminRequestDto dto) throws Exception {
-        Long res = meetingService.isExistKey(dto);
+    @GetMapping("/findMeeting")
+    public ResponseEntity<String> isMeetingExist(@RequestParam String passkey) throws Exception {
+        Long res = meetingService.isExistKey(passkey);
         return new ResponseEntity<>(res.toString(), HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/meet/userCheck")
-    public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) throws Exception{
+    @PostMapping("/userCheck")
+    public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) throws Exception {
         Long resId = meetingService.insertAttendee(dto);
         return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
 
-    @PostMapping("/api/v1/meet/userList") //날짜별
-    public List<MemberResponseDto> findAllMemberByDate(@RequestBody MeetingRequestDto dto)throws Exception {
-        return meetingService.findMembersByDate(dto.getDateTime());
+    @GetMapping("/list") //회원별
+    public List<MeetingResponseDto> findMeetingsByStudentId(@RequestParam Long studentId) throws Exception {
+        return meetingService.findMeetingsByStudentId(studentId);
     }
 
-    @GetMapping("/api/v1/meet/userList")
-    public List<MemberMeetingResponseDto> findAllMember()throws Exception {
-        return meetingService.findAllMember();
+    @PostMapping("/list") //암호별
+    public List<CheckedMemberResponseDto> findMembersByPassKey(@RequestParam String passkey) throws Exception {
+        return meetingService.findMembersByPasskey(passkey);
     }
 
-    //삭제 모호 - 날짜별 출석한 학생 삭제
-    @PostMapping("/api/v1/meet/deleteAll") //날짜별
-    public Long deleteAllMember(@RequestBody MeetingRequestDto dto) throws Exception{
-        return meetingService.deleteByDate(dto);
+    @GetMapping("/passkeys") //관리자가 생성한 passkey 조회(createdDateTime Desc정렬)
+    public List<MeetingResponseDto> findAllPasskeys() throws Exception {
+        return meetingService.findAllPasskeys();
+    }
+
+    @DeleteMapping //passkey별
+    public Long deletePasskey(@RequestParam String passkey) throws Exception {
+        return meetingService.deleteByPasskey(passkey);
     }
 }

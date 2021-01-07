@@ -9,10 +9,13 @@ import java.time.LocalDateTime;
 
 @Getter
 public class MemberMeetingResponseDto {
+    //for Member
     private Long id;
     private Long studentId;
     private String name;
     private Long groupNum;
+
+    //for Meeting
     private String passkey;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdDateTime;

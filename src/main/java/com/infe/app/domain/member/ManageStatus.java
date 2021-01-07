@@ -16,8 +16,6 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 @Embeddable
 public class ManageStatus {
-
-    @Setter
     @Enumerated(EnumType.STRING)
     private State attendingStatus = State.ATTENDING; //재학(기본), 휴학, 군휴학
 

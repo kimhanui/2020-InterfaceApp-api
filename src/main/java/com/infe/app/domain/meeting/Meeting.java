@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.rmi.registry.LocateRegistry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class Meeting {
     private LocalDateTime endDateTime;
 
     @Builder
-    public Meeting(String passkey,Double lat, Double lon, LocalDateTime createdDateTime, LocalDateTime endDateTime) {
+    public Meeting(String passkey, Double lat, Double lon, LocalDateTime createdDateTime, LocalDateTime endDateTime) {
         this.passkey = passkey;
         this.lat = lat;
         this.lon = lon;
@@ -47,8 +46,19 @@ public class Meeting {
         this.endDateTime = endDateTime;
     }
 
-    public void addMember(Member member){
-        members.add(member);
-        member.getMeetings().add(this);
+    public void addMember(Member member) {
+        if (!this.members.contains(member)) {
+            members.add(member);
+            if (!member.getMeetings().contains(this))
+                member.getMeetings().add(this);
+        }
+    }
+
+    public void deleteMember(Member member) {
+        if (this.members.contains(member)) {
+            members.remove(this);
+            if (this.members.contains(member))
+                this.members.remove(member);
+        }
     }
 }

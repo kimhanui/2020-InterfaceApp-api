@@ -13,9 +13,12 @@ import java.util.Optional;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     //이미 만들어진 Meeting을 찾는 메서드 (by meetingName 또는 value)
-    Optional<Meeting> findMeetingByPasskey(String passKey);
+    Optional<Meeting> findByPasskey(String passKey);
 
     Optional<Meeting> findMeetingsByCreatedDateTime(LocalDateTime dateTime);
+
+    @Query("select m from Meeting m order by m.createdDateTime DESC")
+    List<Meeting> findAllByDesc();
 
     @Query(value = "select m from Member m Join m.meetings mt " +
             "where mt.createdDateTime = :dateTime order By m.generation ASC, m.studentId ASC")

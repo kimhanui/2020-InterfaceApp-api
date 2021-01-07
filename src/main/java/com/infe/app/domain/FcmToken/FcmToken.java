@@ -1,5 +1,7 @@
 package com.infe.app.domain.FcmToken;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

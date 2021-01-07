@@ -1,5 +1,7 @@
 package com.infe.app.service;
 
+import com.infe.app.domain.FcmToken.FcmToken;
+import com.infe.app.domain.FcmToken.FcmTokenRespository;
 import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
@@ -11,13 +13,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Log
+@Transactional
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MemberServiceTest {
@@ -27,6 +33,12 @@ public class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    FcmTokenRespository fcmTokenRespository;
+
+    @Autowired
+    FcmTokenService fcmTokenService;
 
     @After
     public void tearDown() {
@@ -92,5 +104,19 @@ public class MemberServiceTest {
                 ID = targetID;
             }
         }
+    }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void 토큰으로_삭제_정상작동(){
+        //given
+        String token="abcdefg12345";
+        fcmTokenService.insert(token);
+
+        //when
+        assertThat(fcmTokenRespository.findByToken(token).get().getToken()).isEqualTo(token);
+
+        fcmTokenRespository.deleteByToken(token);
+        FcmToken fcmToken = fcmTokenRespository.findByToken(token)
+                .orElseThrow(()->new InvalidDataAccessApiUsageException("존재하지 않는 토큰입니다."));
     }
 }

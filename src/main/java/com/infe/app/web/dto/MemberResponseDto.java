@@ -1,5 +1,6 @@
 package com.infe.app.web.dto;
 
+import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
 import lombok.Getter;
 
@@ -10,6 +11,9 @@ public class MemberResponseDto {
     private String name;
     private Long generation;
     private String contact;
+    private String phone;
+    private String department;
+    private ManageStatus manageStatus;
 
     public MemberResponseDto(Member m) {
         this.id = m.getId();
@@ -17,6 +21,9 @@ public class MemberResponseDto {
         this.name = m.getName();
         this.generation = m.getGeneration();
         this.contact = m.getContact();
+        this.phone = m.getPhone();
+        this.department = m.getDepartment();
+        this.manageStatus = m.getManageStatus();
     }
 
     public Member toEntity(){
@@ -26,6 +33,9 @@ public class MemberResponseDto {
                 .name(name)
                 .generation(generation)
                 .contact(contact)
+                .phone(phone)
+                .department(department)
+                .manageStatus(manageStatus)
                 .build();
     }
 }

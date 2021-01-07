@@ -14,6 +14,7 @@ public class AdminRequestDto {
     private String passkey;
     private Double lat;
     private Double lon;
+    /**개선사항: 입력 없으면.now()로**/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")

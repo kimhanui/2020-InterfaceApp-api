@@ -3,6 +3,7 @@ package com.infe.app.service;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.web.dto.LoginRequestDto;
 import com.infe.app.web.dto.MemberRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final String ADMINPW = "interfaceAdmin";
+    private final String USERPW = "interfaceUser";
 
     @Transactional
     public Long insert(MemberRequestDto dto) throws IllegalArgumentException{
@@ -68,4 +71,15 @@ public class MemberService {
         return id;
     }
 
+    public Boolean login(LoginRequestDto loginRequestDto){
+        String type = loginRequestDto.getType();
+        String pw = loginRequestDto.getPassword();
+        if(type.equals("admin") && pw.equals(ADMINPW)){
+            return true;
+        }
+        else if(type.equals("user") && pw.equals(USERPW)){
+            return true;
+        }
+        throw new IllegalStateException("존재하지 않는 타입 또는 비밀번호입니다.");
+    }
 }
