@@ -1,6 +1,5 @@
 package com.infe.app.web;
 
-import com.google.gson.JsonArray;
 import com.infe.app.service.FcmTokenService;
 import com.infe.app.web.dto.FcmTokenDto;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class FcmTokenApiController {
     }
 
     @GetMapping("/list")
-    public List<FcmTokenDto> findAll() throws Exception{
+    public List<FcmTokenDto> findAll() throws Exception {
         return fcmTokenService.findAll();
     }
 
