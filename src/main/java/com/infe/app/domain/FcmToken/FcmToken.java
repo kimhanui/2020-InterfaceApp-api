@@ -1,7 +1,5 @@
 package com.infe.app.domain.FcmToken;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +18,7 @@ public class FcmToken {
     private Long id;
     private String token;
 
-    public FcmToken(String token){
+    public FcmToken(String token) {
         this.token = token;
     }
 }

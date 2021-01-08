@@ -26,24 +26,24 @@ public class MeetingApiController { //0000으로 초기화?
         return meetingService.insertMeeting(dto);
     }
 
-    @GetMapping("/findMeeting")
-    public ResponseEntity<String> isMeetingExist(@RequestParam String passkey) throws Exception {
-        Long res = meetingService.isExistKey(passkey);
-        return new ResponseEntity<>(res.toString(), HttpStatus.OK);
-    }
-
     @PostMapping("/userCheck")
     public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) throws Exception {
         Long resId = meetingService.insertAttendee(dto);
         return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
 
-    @GetMapping("/list") //회원별
+    @GetMapping("/findMeeting")
+    public ResponseEntity<String> isMeetingExist(@RequestParam String passkey) throws Exception {
+        Long res = meetingService.isExistKey(passkey);
+        return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping("/list/studentId") //회원별
     public List<MeetingResponseDto> findMeetingsByStudentId(@RequestParam Long studentId) throws Exception {
         return meetingService.findMeetingsByStudentId(studentId);
     }
 
-    @PostMapping("/list") //암호별
+    @GetMapping("/list/passkey") //암호별
     public List<CheckedMemberResponseDto> findMembersByPassKey(@RequestParam String passkey) throws Exception {
         return meetingService.findMembersByPasskey(passkey);
     }
