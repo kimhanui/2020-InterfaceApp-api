@@ -1,6 +1,5 @@
 package com.infe.app.web.dto.Meeting;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.infe.app.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +16,7 @@ public class StudentSaveRequestDto {
     private String passkey;
     private Double lat;
     private Double lon;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime = LocalDateTime.now();
 
     public Member toMember() {
         return Member.builder()

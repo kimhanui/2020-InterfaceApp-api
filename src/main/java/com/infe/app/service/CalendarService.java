@@ -2,6 +2,7 @@ package com.infe.app.service;
 
 import com.infe.app.domain.Calendar.Calendar;
 import com.infe.app.domain.Calendar.CalendarRepository;
+import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.CalendarRequestDto;
 import com.infe.app.web.dto.CalendarResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CalendarService {
     private final CalendarRepository calendarRepository;
-
     @Transactional
     public Long insert(CalendarRequestDto calendarRequestDto) {
         return calendarRepository.save(calendarRequestDto.toEntity()).getId();
@@ -34,7 +34,12 @@ public class CalendarService {
     }
     @Transactional
     public Long delete(Long id) throws IllegalArgumentException{
-        calendarRepository.deleteById(id);
+        try {
+            calendarRepository.deleteById(id);
+        } catch(IllegalArgumentException e){
+            throw new IllegalArgumentException(ErrorMessage.NoExist("일정"));
+        }
+
         return id;
     }
 }

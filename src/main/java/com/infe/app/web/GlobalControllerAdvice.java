@@ -40,7 +40,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler({NullPointerException.class})
     protected ResponseEntity<String> handleTimeoutException(NullPointerException e) {
-        log.warning("TimeoutException: " + e);
+        log.warning("NullPointerException: " + e);
 
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }

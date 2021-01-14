@@ -5,7 +5,6 @@ import com.infe.app.domain.FcmToken.FcmTokenRespository;
 import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
-import com.infe.app.web.dto.FcmTokenDto;
 import com.infe.app.web.dto.MemberRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.extern.java.Log;
@@ -106,18 +105,18 @@ public class MemberServiceTest {
         }
     }
 
-    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void 토큰으로_삭제_정상작동() throws Exception {
         //given
         String token = "abcdefg12345";
         FcmToken fcmToken = new FcmToken(token);
-        fcmTokenService.insert(new FcmTokenDto(fcmToken));
+        fcmTokenService.insert(token);
 
-        //when
+        //when,then
         assertThat(fcmTokenRespository.findByToken(token).get().getToken()).isEqualTo(token);
 
         fcmTokenRespository.deleteByToken(token);
         FcmToken res = fcmTokenRespository.findByToken(token)
-                .orElseThrow(() -> new InvalidDataAccessApiUsageException("존재하지 않는 토큰입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 토큰입니다."));
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Log
 @RequestMapping("/api/v1/meet/**")
@@ -23,6 +24,7 @@ public class MeetingApiController { //0000으로 초기화?
 
     @PostMapping("/insert")
     public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
+        log.info(dto.toString());
         return meetingService.insertMeeting(dto);
     }
 
@@ -54,7 +56,7 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     @DeleteMapping //passkey별
-    public Long deletePasskey(@RequestParam String passkey) throws Exception {
-        return meetingService.deleteByPasskey(passkey);
+    public Long deletePasskey(@RequestBody Map<String,String> passkeyRequestData) throws Exception {
+        return meetingService.deleteByPasskey(passkeyRequestData.get("passkey"));
     }
 }

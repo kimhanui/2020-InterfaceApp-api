@@ -111,23 +111,23 @@ public class MeetingServiceTest {
         assertThat(resId).isGreaterThan(0L);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void 참석자_회원정보불일치_인증실패() throws IllegalArgumentException, TimeoutException {
-        //given
-        String passkey = "VJ5FG";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-                .studentId(100100L)
-                .name("WrongKim")
-                .generation(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
-                .lat(lat)
-                .lon(lon)
-                .build();
-
-        //then, when
-        meetingService.insertAttendee(dto);
-    }
+//    @Test(expected = IllegalArgumentException.class)
+//    public void 참석자_회원정보불일치_인증실패() throws IllegalArgumentException, TimeoutException {
+//        //given
+//        String passkey = "VJ5FG";
+//        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+//                .studentId(100100L)
+//                .name("WrongKim")
+//                .generation(30L)
+//                .passkey(passkey)
+//                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+//                .lat(lat)
+//                .lon(lon)
+//                .build();
+//
+//        //then, when
+//        meetingService.insertAttendee(dto);
+//    }
 
 
     @Test(expected = IllegalArgumentException.class)
@@ -279,6 +279,7 @@ public class MeetingServiceTest {
     @Test
     public void 해당passkey_모임삭제() throws TimeoutException {
         //given
+        //모임 생성
         String passkey = "TMPKEY";
         AdminRequestDto adminRequestDto = AdminRequestDto.builder()
                 .passkey(passkey)
@@ -289,6 +290,7 @@ public class MeetingServiceTest {
                 .build();
         meetingService.insertMeeting(adminRequestDto);
 
+        //모임에 출석한 회원 생성
         Member member = memberService.find(1L).toEntity();
         StudentSaveRequestDto studentSaveRequestDto = StudentSaveRequestDto.builder()
                 .studentId(member.getStudentId())

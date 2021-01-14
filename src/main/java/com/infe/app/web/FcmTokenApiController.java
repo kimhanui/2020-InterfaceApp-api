@@ -1,12 +1,12 @@
 package com.infe.app.web;
 
 import com.infe.app.service.FcmTokenService;
-import com.infe.app.web.dto.FcmTokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Log
 @RequiredArgsConstructor
@@ -16,17 +16,17 @@ public class FcmTokenApiController {
     private final FcmTokenService fcmTokenService;
 
     @PostMapping
-    public Long save(@RequestBody FcmTokenDto fcmTokenDto) throws Exception {
-        return fcmTokenService.insert(fcmTokenDto);
+    public Long save(@RequestBody Map<String, String> fcmTokenRequest) throws Exception {
+        return fcmTokenService.insert(fcmTokenRequest.get("token"));
     }
 
     @GetMapping("/list")
-    public List<FcmTokenDto> findAll() throws Exception {
+    public List<Map<String, String>> findAll() throws Exception {
         return fcmTokenService.findAll();
     }
 
     @DeleteMapping
-    public Long delete(@RequestBody FcmTokenDto fcmTokenDto) throws Exception {
-        return fcmTokenService.delete(fcmTokenDto);
+    public Long delete(@RequestBody Map<String, String> fcmTokenData) throws Exception {
+        return fcmTokenService.delete(fcmTokenData.get("token"));
     }
 }

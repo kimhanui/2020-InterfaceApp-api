@@ -61,9 +61,7 @@ public class MemberService {
         //meeting 연관관계 다 제거 후
         Member member = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 회원이 없습니다."));
         List<Meeting> meetings = member.getMeetings();
-
         for (Meeting meeting: meetings) {
-            log.info("id="+meeting.getId()+"paaskey="+meeting.getPasskey());
             meeting.getMembers().remove(member);
         }
 

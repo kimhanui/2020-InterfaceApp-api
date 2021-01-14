@@ -34,6 +34,10 @@ public class MeetingService {
             throw new IllegalArgumentException("이미 존재하는 출석키 입니다.");
         }); //출석키 중복확인
 
+        if(!dto.getStartTime().isBefore(dto.getEndTime())){
+            throw new IllegalArgumentException("종료시각이 시작시각보다 빠를 수 없습니다.");
+        }
+
         Meeting meeting = Meeting.builder()
                 .passkey(dto.getPasskey())
                 .lat(dto.getLat())
