@@ -1,10 +1,11 @@
 package com.infe.app.service;
 
-import com.infe.app.domain.FcmToken.FcmToken;
-import com.infe.app.domain.FcmToken.FcmTokenRespository;
+import com.infe.app.domain.fcmToken.FcmToken;
+import com.infe.app.domain.fcmToken.FcmTokenRespository;
 import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.domain.member.State;
 import com.infe.app.web.dto.MemberRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.extern.java.Log;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,16 +45,17 @@ public class MemberServiceTest {
     }
 
     @Test
-    public void 참석여부_BooleanToYNConverter_정상작동() {
+    public void DB에저장할때_참석여부_boolean에서_YN로_변환됨() {
         //given
-        ManageStatus manageStatus = new ManageStatus(ManageStatus.State.ATTENDING);
+        ManageStatus manageStatus = new ManageStatus();
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(17000000L)
                 .name("lee")
                 .generation(31L)
                 .contact("kim@gmail.com")
                 .phone("010-1111-2222")
-                .manageStatus(manageStatus)
+                .state(State.MILITARY.getValue())
+                .manageStatus(manageStatus.toDto())
                 .build();
 
         //when

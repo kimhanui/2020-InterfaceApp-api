@@ -1,4 +1,4 @@
-package com.infe.app.domain.FcmToken;
+package com.infe.app.domain.fcmToken;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -120,7 +120,7 @@ public class MeetingServiceTest {
 //                .name("WrongKim")
 //                .generation(30L)
 //                .passkey(passkey)
-//                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+//                .dateTime(LocalDateTime.toDto(2020, 9, 9, 0, 30, 0))
 //                .lat(lat)
 //                .lon(lon)
 //                .build();

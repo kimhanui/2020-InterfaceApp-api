@@ -1,4 +1,4 @@
-package com.infe.app.domain.FcmToken;
+package com.infe.app.domain.fcmToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

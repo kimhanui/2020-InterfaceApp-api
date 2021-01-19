@@ -6,11 +6,13 @@ import com.infe.app.web.dto.MemberRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Entity
@@ -35,9 +37,9 @@ public class Member extends BaseTimeEntity {
 
     private String department;
 
-    /**
-     * 참석기록
-     **/
+    @Enumerated(EnumType.STRING)
+    private State state;
+
     @Embedded
     private ManageStatus manageStatus;
 
@@ -46,7 +48,7 @@ public class Member extends BaseTimeEntity {
 
     @Builder
     public Member(Long id, Long studentId, String name, Long generation,
-                  String contact, String phone, String department, ManageStatus manageStatus) {
+                  String contact, String phone, String department, State state, ManageStatus manageStatus) {
         this.id = id;
         this.studentId = studentId;
         this.name = name;
@@ -54,6 +56,7 @@ public class Member extends BaseTimeEntity {
         this.contact = contact;
         this.phone = phone;
         this.department = department;
+        this.state = (state != null) ? state : State.ATTENDING;
         this.manageStatus = manageStatus;
     }
 
@@ -69,6 +72,7 @@ public class Member extends BaseTimeEntity {
         this.contact = dto.getContact();
         this.phone = dto.getPhone();
         this.department = dto.getDepartment();
-        this.manageStatus = dto.getManageStatus();
+        this.state = State.valueOf(dto.getState());
+        this.manageStatus = new ManageStatus(dto.getManageStatus());
     }
 }

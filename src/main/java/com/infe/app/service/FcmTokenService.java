@@ -1,7 +1,7 @@
 package com.infe.app.service;
 
-import com.infe.app.domain.FcmToken.FcmToken;
-import com.infe.app.domain.FcmToken.FcmTokenRespository;
+import com.infe.app.domain.fcmToken.FcmToken;
+import com.infe.app.domain.fcmToken.FcmTokenRespository;
 import com.infe.app.service.ErrorMessage.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class FcmTokenService {
 
 //    @Transactional
 //    public Long update(String token){
-//        FcmToken fcmToken = fcmTokenRespository.findByToken(token).orElseThrow(()->new IllegalArgumentException("존재하지 않는 토큰입니다."));
+//        fcmToken fcmToken = fcmTokenRespository.findByToken(token).orElseThrow(()->new IllegalArgumentException("존재하지 않는 토큰입니다."));
 //        fcmToken.
 //    }
 

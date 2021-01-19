@@ -1,4 +1,4 @@
-package com.infe.app.domain.Calendar;
+package com.infe.app.domain.calendar;
 
 import com.infe.app.domain.BaseTimeEntity;
 import lombok.Builder;

@@ -2,8 +2,15 @@ package com.infe.app.web.dto;
 
 import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
+import com.infe.app.domain.member.State;
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.java.Log;
 
+import java.util.Map;
+
+@Log
+@ToString
 @Getter
 public class MemberResponseDto {
     private Long id;
@@ -13,7 +20,8 @@ public class MemberResponseDto {
     private String contact;
     private String phone;
     private String department;
-    private ManageStatus manageStatus;
+    private String state;
+    private Map<String, String> manageStatus;
 
     public MemberResponseDto(Member m) {
         this.id = m.getId();
@@ -23,10 +31,11 @@ public class MemberResponseDto {
         this.contact = m.getContact();
         this.phone = m.getPhone();
         this.department = m.getDepartment();
-        this.manageStatus = m.getManageStatus();
+        this.state = m.getState().getValue();
+        this.manageStatus = m.getManageStatus().toDto();
     }
 
-    public Member toEntity(){
+    public Member toEntity() {
         return Member.builder()
                 .id(id)
                 .studentId(studentId)
@@ -35,7 +44,9 @@ public class MemberResponseDto {
                 .contact(contact)
                 .phone(phone)
                 .department(department)
-                .manageStatus(manageStatus)
+                .state(State.valueOfLabel(state))
+                .manageStatus(new ManageStatus(manageStatus))
                 .build();
     }
+
 }

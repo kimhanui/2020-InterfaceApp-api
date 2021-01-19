@@ -1,7 +1,7 @@
 package com.infe.app.service;
 
-import com.infe.app.domain.Calendar.Calendar;
-import com.infe.app.domain.Calendar.CalendarRepository;
+import com.infe.app.domain.calendar.Calendar;
+import com.infe.app.domain.calendar.CalendarRepository;
 import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.CalendarRequestDto;
 import com.infe.app.web.dto.CalendarResponseDto;

@@ -1,7 +1,7 @@
 package com.infe.app.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.infe.app.domain.Calendar.Calendar;
+import com.infe.app.domain.calendar.Calendar;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
