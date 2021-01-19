@@ -1,7 +1,6 @@
-set foreign_key_checks =0;
 insert into posts(created_date_time, modified_date_time,title, content) values ('2020-08-13T03:17:14','2020-08-13T03:17:14','집회','대강당으로모이세여');
 
-insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, state,first_dues ,second_dues,opening_meeting,final_meeting)
+insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone,state ,first_dues ,second_dues,opening_meeting,final_meeting)
 values('2020-08-13T03:17:14','2020-08-13T03:17:14',100100,'kim', 30 ,'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y');
 insert into member(created_date_time, modified_date_time,student_id , name , generation, contact,phone, state,first_dues ,second_dues,opening_meeting,final_meeting)
 values('2020-08-13T03:17:14','2020-08-13T03:17:14',200200,'lee', 30, 'kim@gmail.com','010-2222-2222','ATTENDING','Y','Y','Y','Y' );

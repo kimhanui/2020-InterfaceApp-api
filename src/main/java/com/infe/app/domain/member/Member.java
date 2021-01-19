@@ -30,16 +30,16 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     @Column(nullable = false)
-    private Long generation; //기수
+    private Long generation;
+
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     private String contact;
 
     private String phone;
 
     private String department;
-
-    @Enumerated(EnumType.STRING)
-    private State state;
 
     @Embedded
     private ManageStatus manageStatus;
