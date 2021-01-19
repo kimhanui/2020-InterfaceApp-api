@@ -32,6 +32,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Long generation;
 
+    @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private State state;
 
