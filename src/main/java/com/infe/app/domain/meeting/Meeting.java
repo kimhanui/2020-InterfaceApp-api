@@ -1,5 +1,6 @@
 package com.infe.app.domain.meeting;
 
+import com.infe.app.domain.attendee.Attendee;
 import com.infe.app.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,11 +27,8 @@ public class Meeting {
 
     private Double lon;
 
-    @ManyToMany
-    @JoinTable(name = "meeting_member",
-            joinColumns = @JoinColumn(name = "meeting_id"),
-            inverseJoinColumns = @JoinColumn(name = "member_id"))
-    private List<Member> members = new ArrayList<>();
+    @ManyToMany(mappedBy = "meetings")
+    private List<Attendee> attendees = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdDateTime;
@@ -46,19 +44,12 @@ public class Meeting {
         this.endDateTime = endDateTime;
     }
 
-    public void addMember(Member member) {
-        if (!this.members.contains(member)) {
-            members.add(member);
-            if (!member.getMeetings().contains(this))
-                member.getMeetings().add(this);
-        }
-    }
-
-    public void deleteMember(Member member) {
-        if (this.members.contains(member)) {
-            members.remove(this);
-            if (this.members.contains(member))
-                this.members.remove(member);
-        }
-    }
+//
+//    public void deleteMember(Member member) {
+//        if (this.members.contains(member)) {
+//            members.remove(this);
+//            if (this.members.contains(member))
+//                this.members.remove(member);
+//        }
+//    }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,71 +35,33 @@ public class MemberApiControllerTest {
     @Test
     public void Member_등록된다() throws Exception {
         //given
-        Long STUDENTID = 170170L;
+        Long STUDENTID = 99999L;
         String NAME = "baron";
         Long GROUPNUM = 30L;
         String CONTACT = "1234-1234";
 
+        List<MemberRequestDto> dtos = new ArrayList<>();
         MemberRequestDto dto = MemberRequestDto.builder()
                 .studentId(STUDENTID)
                 .name(NAME)
                 .generation(GROUPNUM)
                 .contact(CONTACT)
                 .build();
+        dtos.add(dto);
         String url = "http://localhost:" + port + "/api/v1/member";
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, dto, Long.class);
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, dtos, Long.class);
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-        List<Member> members = memberRepository.findAll();
-        int size = members.size();
-        assertThat(members.get(size - 1).getStudentId()).isEqualTo(STUDENTID);
-        assertThat(members.get(size - 1).getName()).isEqualTo(NAME);
-        assertThat(members.get(size - 1).getGeneration()).isEqualTo(GROUPNUM);
-        assertThat(members.get(size - 1).getContact()).isEqualTo(CONTACT);
+        Member resultMember = memberRepository.findByStudentId(99999L).get();
+        assertThat(resultMember.getName()).isEqualTo(NAME);
+        assertThat(resultMember.getGeneration()).isEqualTo(GROUPNUM);
+        assertThat(resultMember.getContact()).isEqualTo(CONTACT);
     }
 
-    @Test
-    public void Member_수정된다() throws Exception {
-        //given
-        Member savedMember = memberRepository.save(Member.builder()
-                .studentId(999999L)
-                .name("kim-before")
-                .generation(1L)
-                .contact("1234-1234")
-                .build());
-        Long targetId = savedMember.getId();
-        Long expectedStudentId = 999999L;
-        String expectedName = "kim-after";
-        Long expectedGroupNum = 2L;
-        String expectedContact = "1234-1234";
 
-        MemberRequestDto memberRequestDto = MemberRequestDto.builder()
-                .studentId(expectedStudentId)
-                .name(expectedName)
-                .generation(expectedGroupNum)
-                .contact(expectedContact)
-                .build();
-
-        String url = "http://localhost:" + port + "/api/v1/member/" + targetId;
-        HttpEntity<MemberRequestDto> requestEntity = new HttpEntity<>(memberRequestDto);
-
-        //when
-        ResponseEntity<Long> responseEntity =
-                restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
-
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-
-        List<Member> members = memberRepository.findAllAsc();
-        assertThat(members.get(0).getStudentId()).isEqualTo(expectedStudentId);
-        assertThat(members.get(0).getName()).isEqualTo(expectedName);
-        assertThat(members.get(0).getGeneration()).isEqualTo(expectedGroupNum);
-        assertThat(members.get(0).getContact()).isEqualTo(expectedContact);
-    }
 }

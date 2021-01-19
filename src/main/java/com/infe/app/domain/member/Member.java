@@ -1,7 +1,6 @@
 package com.infe.app.domain.member;
 
 import com.infe.app.domain.BaseTimeEntity;
-import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.web.dto.MemberRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,9 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Member은 회원 명부 관리에만 사용됩니다.
+ * 따라서 Meeting 엔티티와 연관관계를 맺지 않습니다.
+ */
 @ToString
 @Getter
 @NoArgsConstructor
@@ -43,9 +44,6 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private ManageStatus manageStatus;
 
-    @ManyToMany(mappedBy = "members")
-    private List<Meeting> meetings = new ArrayList<>();
-
     @Builder
     public Member(Long id, Long studentId, String name, Long generation,
                   String contact, String phone, String department, State state, ManageStatus manageStatus) {
@@ -58,11 +56,6 @@ public class Member extends BaseTimeEntity {
         this.department = department;
         this.state = (state != null) ? state : State.ATTENDING;
         this.manageStatus = manageStatus;
-    }
-
-    public void addMeeting(Meeting meeting) {
-        meetings.add(meeting);
-        meeting.getMembers().add(this);
     }
 
     public void update(MemberRequestDto dto) {

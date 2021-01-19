@@ -1,22 +1,26 @@
 package com.infe.app.service;
 
+import com.infe.app.domain.attendee.Attendee;
+import com.infe.app.domain.attendee.AttendeeRepository;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
-import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
-import com.infe.app.web.dto.Meeting.CheckedMemberResponseDto;
+import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
 import com.infe.app.web.dto.Meeting.MeetingResponseDto;
-import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
+import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,7 +29,7 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class MeetingService {
     private final MeetingRepository meetingRepository;
-    private final MemberRepository memberRepository;
+    private final AttendeeRepository attendeeRepository;
 
     @Transactional
     public Long insertMeeting(AdminRequestDto dto) throws IllegalArgumentException {
@@ -51,27 +55,21 @@ public class MeetingService {
     @Transactional
     public Long isExistKey(String passkey) throws IllegalArgumentException {
         Meeting meeting = meetingRepository.findByPasskey(passkey)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
         return meeting.getId();
     }
 
     @Transactional
-    public Long insertAttendee(StudentSaveRequestDto dto) throws IllegalArgumentException, TimeoutException, NullPointerException {
+    public Long attendanceChecking(AttendanceRequestDto dto) throws IllegalArgumentException, TimeoutException, NullPointerException {
         try {
             //passkey 확인
             Meeting meeting = meetingRepository.findByPasskey(dto.getPasskey())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
+                    .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
 
-            //회원 확인
-            Member member = memberRepository.findByStudentId(dto.getStudentId()).
-                    orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원 입니다."));
-            log.info("dto=" + dto.getGeneration() + ", " + dto.getName() + "/member=" + member.getGeneration() + ", " + member.getName());
-            if (!((dto.getGeneration().equals(member.getGeneration())) && (dto.getName().equals(member.getName())))) {
-                throw new IllegalArgumentException("회원정보가 일치하지 않습니다.");
-            }
-
-            //회원 중복 확인
-            if (meeting.getMembers().contains(member)) {
+            //출석 중복 확인
+            Attendee attendee = attendeeRepository.findByStudentId(dto.getStudentId())
+                    .orElseGet(()->dto.toAttendee());
+            if (meeting.getAttendees().contains(attendee)) {
                 throw new IllegalArgumentException("이미 출석되었습니다.");
             }
 
@@ -87,9 +85,21 @@ public class MeetingService {
                 throw new IllegalArgumentException("출석 위치가 다릅니다.");
             }
 
-            //출석체크처리
-            meeting.addMember(member); //Meeting-Member 서로 추가해줌
-            return member.getId();
+            // token 일치 확인 및 업데이트
+            if(!attendee.getToken().equals(dto.getToken())){
+                boolean isUnique = attendeeRepository.findAll().stream()
+                        .map(Attendee::getToken)
+                        .noneMatch(t -> dto.getToken().equals(t));
+                if(isUnique == true)
+                    attendee.updateToken(dto.getToken());
+                else throw new IllegalArgumentException("이미 사용중인 토큰입니다.");
+
+            }
+
+            //출석 체크 처리
+            attendee.addMeeting(meeting);
+            return attendee.getId();
+
         } catch (NullPointerException e) {
             throw new NullPointerException("입력하지 않은 항목이 있습니다.");
         }
@@ -97,16 +107,28 @@ public class MeetingService {
 
     @Transactional(readOnly = true)
     public List<MeetingResponseDto> findMeetingsByStudentId(Long studentId) {
-        Member member = memberRepository.findByStudentId(studentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
-        return member.getMeetings().stream()
-                .map(MeetingResponseDto::new)
-                .collect(toList());
+         return attendeeRepository.findByStudentId(studentId)
+                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("회원")))
+                 .getMeetings()
+                 .stream()
+                 .map(MeetingResponseDto::new)
+                 .sorted(( m1,m2)-> m1.getStartTime().isBefore(m2.getStartTime())?1:0)
+                 .collect(Collectors.toList());
+
+
+
     }
 
     @Transactional(readOnly = true)
-    public List<CheckedMemberResponseDto> findMembersByPasskey(String passkey) {
-        return meetingRepository.findByPasskey(passkey).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."))
-                .getMembers().stream().map(CheckedMemberResponseDto::new).collect(toList());
+    public List<AttendanceResponseDto> findMembersByPasskey(String passkey) {
+        return meetingRepository.findByPasskey(passkey)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")))
+                .getAttendees()
+                .stream()
+                .map(AttendanceResponseDto::new)
+                .sorted(( a1,a2)-> (int)(a1.getGeneration() - a2.getGeneration()))
+                .sorted((a1,a2)-> (int) (a1.getStudentId() - a2.getStudentId()))
+                .collect(toList());
     }
 
     @Transactional(readOnly = true)
@@ -120,9 +142,15 @@ public class MeetingService {
     @Transactional
     public Long deleteByPasskey(String passkey) throws IllegalArgumentException {
         Meeting meeting = meetingRepository.findByPasskey(passkey)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 출석키 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
         Long id = meeting.getId();
 
+        meeting.getAttendees().stream()
+                .forEach(
+                        attendee -> {
+                            if(attendee.getMeetings().contains(meeting))
+                                attendee.getMeetings().remove(meeting);
+                        });
         meetingRepository.delete(meeting);
         return id;
     }

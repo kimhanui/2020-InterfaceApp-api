@@ -2,9 +2,9 @@ package com.infe.app.web;
 
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
-import com.infe.app.web.dto.Meeting.CheckedMemberResponseDto;
+import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
 import com.infe.app.web.dto.Meeting.MeetingResponseDto;
-import com.infe.app.web.dto.Meeting.StudentSaveRequestDto;
+import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -29,8 +29,8 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     @PostMapping("/userCheck")
-    public ResponseEntity<String> insertAttendee(@RequestBody StudentSaveRequestDto dto) throws Exception {
-        Long resId = meetingService.insertAttendee(dto);
+    public ResponseEntity<String> insertAttendee(@RequestBody AttendanceRequestDto dto) throws Exception {
+        Long resId = meetingService.attendanceChecking(dto);
         return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
 
@@ -46,7 +46,7 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     @GetMapping("/list/passkey") //암호별
-    public List<CheckedMemberResponseDto> findMembersByPassKey(@RequestParam String passkey) throws Exception {
+    public List<AttendanceResponseDto> findMembersByPassKey(@RequestParam String passkey) throws Exception {
         return meetingService.findMembersByPasskey(passkey);
     }
 

@@ -1,6 +1,5 @@
 package com.infe.app.domain.login;
 
-import com.infe.app.domain.member.State;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

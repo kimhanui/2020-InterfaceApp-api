@@ -1,8 +1,9 @@
 package com.infe.app.service;
 
+import com.infe.app.domain.attendee.Attendee;
+import com.infe.app.domain.attendee.AttendeeRepository;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
-import com.infe.app.domain.member.Member;
 import com.infe.app.web.dto.Meeting.*;
 import lombok.extern.java.Log;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -33,13 +33,13 @@ public class MeetingServiceTest {
     private MeetingService meetingService;
 
     @Autowired
-    private MemberService memberService;
+    private AttendeeRepository attendeeRepository;
 
     private final Double lat = 33.33;
     private final Double lon = 22.22;
 
     @Test
-    public void passkey로_찾기() {
+    public void passkey_존재한다() {
         //given
         String passkey = "SSD2K";
 
@@ -53,7 +53,7 @@ public class MeetingServiceTest {
     }
 
     @Test
-    public void Meeting_저장() {
+    public void Meeting_생성_성공() {
         //given
         String inputValue = "ZZZZZ";
         Meeting meeting = Meeting.builder()
@@ -73,7 +73,7 @@ public class MeetingServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void Meeting중복_예외발생() throws Exception {
+    public void 중복Meeting_생성_예외발생() throws Exception {
         //given
 
         String inputValue = "SSD2K";
@@ -93,77 +93,61 @@ public class MeetingServiceTest {
     public void 참석자_올바른출석암호_인증성공한다() throws TimeoutException {
         //given
         String passkey = "VJ5FG";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+        AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
                 .build();
 
         //then
-        Long resId = 0L;
-        resId = meetingService.insertAttendee(dto);
+        Long resId = meetingService.attendanceChecking(dto);
 
         //when
         assertThat(resId).isGreaterThan(0L);
     }
-
-//    @Test(expected = IllegalArgumentException.class)
-//    public void 참석자_회원정보불일치_인증실패() throws IllegalArgumentException, TimeoutException {
-//        //given
-//        String passkey = "VJ5FG";
-//        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
-//                .studentId(100100L)
-//                .name("WrongKim")
-//                .generation(30L)
-//                .passkey(passkey)
-//                .dateTime(LocalDateTime.toDto(2020, 9, 9, 0, 30, 0))
-//                .lat(lat)
-//                .lon(lon)
-//                .build();
-//
-//        //then, when
-//        meetingService.insertAttendee(dto);
-//    }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void 참석자_틀린출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
         String passkey = "SSD2KKKK";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+        AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
                 .build();
 
         //then, when
-        meetingService.insertAttendee(dto);
+        meetingService.attendanceChecking(dto);
     }
 
     @Test(expected = TimeoutException.class)
     public void 참석자_만료된출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
         String passkey = "VJ5FG";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+        AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
+                .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
                 .build();
 
         //then, when
-        meetingService.insertAttendee(dto);
+        meetingService.attendanceChecking(dto);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -171,82 +155,39 @@ public class MeetingServiceTest {
         //given
         Double wrongLat = 55.55;
         String passkey = "VJ5FG";
-        StudentSaveRequestDto dto = StudentSaveRequestDto.builder()
+        AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
                 .passkey(passkey)
                 .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .token("TOKEN1")
                 .lat(wrongLat)
                 .lon(lon)
                 .build();
 
         //then, when
-        meetingService.insertAttendee(dto);
+        meetingService.attendanceChecking(dto);
     }
 
-    @Test
-    public void findAllMemberAsc() {
+    @Test(expected = IllegalArgumentException.class)
+    public void 참석자_본인토큰이_아닌_토큰중복으로_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
-        List<String> names = Arrays.asList("park", "lee", "kim");
-        LocalDateTime dateTime = LocalDateTime.of(2020, 11, 11, 0, 0, 0);
-
-        //when
-        List<Member> members = meetingRepository.findMembersByDate(dateTime);
-
-        //then
-        Long G = 0L, ID = 0L;
-        Long targetG, targetID;
-        for (Member m : members) {
-            targetG = m.getGeneration();
-            targetID = m.getStudentId();
-
-            //then
-            assertThat(targetG).isGreaterThanOrEqualTo(G);
-            if (targetG == G) {
-                assertThat(targetID).isGreaterThan(ID);
-            } else if (targetG > G) {
-                G = targetG;
-                ID = targetID;
-            }
-        }
-    }
-
-    @Test
-    public void findAllMemberAndMeeting() {
-        //when
-        List<MemberMeetingResponseDto> dtos = meetingRepository.findAllMember();
-
-        //then
-        Long targetID, ID = 0L;
-        LocalDateTime targetM, MEETCREATEDTIME = LocalDateTime.MIN;
-        for (MemberMeetingResponseDto dto : dtos) {
-            targetM = dto.getCreatedDateTime();
-            targetID = dto.getStudentId();
-            log.info(targetM + " " + targetID);
-
-            //then
-            assertThat(targetM).isAfterOrEqualTo(MEETCREATEDTIME);
-            if (targetM == MEETCREATEDTIME) {
-                assertThat(targetID).isGreaterThan(ID);
-            } else if (targetM.isAfter(MEETCREATEDTIME)) {
-                MEETCREATEDTIME = LocalDateTime.of(targetM.toLocalDate(), targetM.toLocalTime());
-                ID = targetID;
-            }
-        }
-    }
-
-    @Test
-    public void 해당passkey의_Member조회() {
-        //given
+        Double wrongLat = 55.55;
         String passkey = "VJ5FG";
+        AttendanceRequestDto dto = AttendanceRequestDto.builder()
+                .studentId(100100L)
+                .name("kim")
+                .generation(30L)
+                .passkey(passkey)
+                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .token("TOKEN2")
+                .lat(wrongLat)
+                .lon(lon)
+                .build();
 
-        //when
-        List<CheckedMemberResponseDto> list = meetingService.findMembersByPasskey(passkey);
-
-        //then
-        assertThat(list.stream().map(CheckedMemberResponseDto::getName).collect(toList()))
-                .contains("yun", "lim", "oh");
+        //then, when
+        meetingService.attendanceChecking(dto);
     }
 
     @Test
@@ -261,6 +202,20 @@ public class MeetingServiceTest {
         assertThat(list.stream().map(MeetingResponseDto::getPasskey).collect(toList()))
                 .contains("SSD2K");
     }
+
+    @Test
+    public void 해당passkey의_Member조회() {
+        //given
+        String passkey = "VJ5FG";
+
+        //when
+        List<AttendanceResponseDto> list = meetingService.findMembersByPasskey(passkey);
+
+        //then
+        assertThat(list.stream().map(AttendanceResponseDto::getName).collect(toList()))
+                .contains("yun", "lim", "oh");
+    }
+
     @Test
     public void 모든_passkey조회_startTime_Desc정렬() {
         //given,when
@@ -276,13 +231,14 @@ public class MeetingServiceTest {
 
         }
     }
+
     @Test
     public void 해당passkey_모임삭제() throws TimeoutException {
         //given
         //모임 생성
-        String passkey = "TMPKEY";
+        String targetPasskey = "TARGET";
         AdminRequestDto adminRequestDto = AdminRequestDto.builder()
-                .passkey(passkey)
+                .passkey(targetPasskey)
                 .lat(lat)
                 .lon(lon)
                 .startTime(LocalDateTime.now())
@@ -291,23 +247,25 @@ public class MeetingServiceTest {
         meetingService.insertMeeting(adminRequestDto);
 
         //모임에 출석한 회원 생성
-        Member member = memberService.find(1L).toEntity();
-        StudentSaveRequestDto studentSaveRequestDto = StudentSaveRequestDto.builder()
-                .studentId(member.getStudentId())
+        AttendanceRequestDto attendanceRequestDto = AttendanceRequestDto.builder()
+                .studentId(100100L)
                 .dateTime(LocalDateTime.now().plusMinutes(30L))
+                .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
                 .name("kim")
                 .generation(30L)
-                .passkey(passkey).build();
-        meetingService.insertAttendee(studentSaveRequestDto);
+                .passkey(targetPasskey)
+                .build();
+        meetingService.attendanceChecking(attendanceRequestDto);
 
         //when
-        Long id = meetingService.deleteByPasskey(passkey);
+        meetingService.deleteByPasskey(targetPasskey);
+        Attendee attendee = attendeeRepository.findByStudentId(100100L).get();
 
         //then
-        assertThat(member.getMeetings().stream().map(Meeting::getPasskey).collect(Collectors.toList())).doesNotContain(passkey);
+        assertThat(attendee.getMeetings().stream()
+                .map(Meeting::getPasskey)
+                .collect(Collectors.toList())).doesNotContain(targetPasskey);
     }
-
-
 }
