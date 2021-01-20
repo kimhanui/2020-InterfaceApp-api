@@ -17,7 +17,7 @@ public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping
-    public Long insert(@RequestBody List<MemberRequestDto> dtos) throws Exception{
+    public String insert(@RequestBody List<MemberRequestDto> dtos) throws Exception{
         memberService.deleteAll();
         return memberService.insertAll(dtos);
     }

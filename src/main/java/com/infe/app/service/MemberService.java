@@ -18,15 +18,26 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-
+    /**
+     * 입력이 리스트로 변경됐으니(데이터 큼)
+     * sql 전달 전 미리 예외 catch해서 정상적인 입력만 insert해야할듯
+     **/
     @Transactional
-    public Long insertAll(List<MemberRequestDto> dtos){
+    public String insertAll(List<MemberRequestDto> dtos) {
+
+        List<Long> list = dtos.stream()
+                .filter(dto -> !dto.getBlank().equals(""))
+                .map(MemberRequestDto::getStudentId)
+                .collect(Collectors.toList());
+        if (!list.isEmpty())
+            throw new NullPointerException("입력하지 않은 항목이 다음 회원 목록에 존재합니다. " + list);
+
         memberRepository.saveAll(dtos.stream().map(MemberRequestDto::toEntity).collect(Collectors.toList()));
-        return 1L;
+        return "정상적으로 저장됐습니다.";
     }
 
     @Transactional(readOnly = true)
-    public List<MemberResponseDto> findAll() throws NullPointerException{
+    public List<MemberResponseDto> findAll() throws NullPointerException {
         try {
             return memberRepository.findAllAsc()
                     .stream()
@@ -39,8 +50,8 @@ public class MemberService {
     }
 
     @Transactional
-    public Long deleteAll() throws Exception{
+    public String deleteAll() throws Exception {
         memberRepository.deleteAll();
-        return 1L;
+        return "정상적으로 삭제됐습니다.";
     }
 }

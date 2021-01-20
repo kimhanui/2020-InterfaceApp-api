@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/meet/**")
 @RequiredArgsConstructor
 @RestController
-public class MeetingApiController { //0000으로 초기화?
+public class MeetingApiController {
 
     private final MeetingService meetingService;
 
@@ -29,7 +30,7 @@ public class MeetingApiController { //0000으로 초기화?
     }
 
     @PostMapping("/userCheck")
-    public ResponseEntity<String> insertAttendee(@RequestBody AttendanceRequestDto dto) throws Exception {
+    public ResponseEntity<String> attendanceChecking(@Valid @RequestBody AttendanceRequestDto dto) throws Exception {
         Long resId = meetingService.attendanceChecking(dto);
         return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
