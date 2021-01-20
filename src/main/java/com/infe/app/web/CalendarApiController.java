@@ -6,6 +6,8 @@ import com.infe.app.web.dto.CalendarResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/calendar/**")
 @RestController
@@ -25,6 +27,11 @@ public class CalendarApiController {
     @GetMapping("/{id}")
     public CalendarResponseDto find(@PathVariable Long id)throws Exception{
         return calendarService.find(id);
+    }
+
+    @GetMapping("/list")
+    public List<CalendarResponseDto> findAll() throws Exception{
+        return calendarService.findAll();
     }
     @DeleteMapping("/{id}")
     public Long delete(@PathVariable Long id)throws Exception {

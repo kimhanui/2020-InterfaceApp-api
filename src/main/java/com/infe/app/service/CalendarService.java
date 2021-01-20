@@ -7,8 +7,12 @@ import com.infe.app.web.dto.CalendarRequestDto;
 import com.infe.app.web.dto.CalendarResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log
 @RequiredArgsConstructor
@@ -23,7 +27,7 @@ public class CalendarService {
     public Long update(Long id, CalendarRequestDto calendarRequestDto) throws IllegalArgumentException{
         Calendar calendar = calendarRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 일정입니다."));
         log.info(calendar.toString());
-        calendar.update(calendar);
+        calendar.update(calendarRequestDto.toEntity());
         return calendar.getId();
     }
     @Transactional(readOnly = true)
@@ -32,14 +36,23 @@ public class CalendarService {
         log.info(calendar.toString());
         return new CalendarResponseDto(calendar);
     }
+
+    @Transactional(readOnly = true)
+    public List<CalendarResponseDto> findAll(){
+        return calendarRepository.findAll()
+                .stream()
+                .map(CalendarResponseDto::new)
+                .sorted((c1, c2) -> c1.getDate().isBefore(c2.getDate())?1:0)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public Long delete(Long id) throws IllegalArgumentException{
         try {
             calendarRepository.deleteById(id);
-        } catch(IllegalArgumentException e){
+        } catch(EmptyResultDataAccessException e){
             throw new IllegalArgumentException(ErrorMessage.NoExist("일정"));
         }
-
         return id;
     }
 }

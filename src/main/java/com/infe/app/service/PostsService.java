@@ -7,6 +7,7 @@ import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,13 +55,13 @@ public class PostsService {
         try {
             postsRepository.deleteById(id);
             return id;
-        }catch (IllegalArgumentException e){
+        }catch (EmptyResultDataAccessException e){
             throw new IllegalArgumentException("해당 게시글이 없습니다.");
         }
     }
 
     @Transactional
-    public Long deleteAll()throws IllegalArgumentException{
+    public Long deleteAll(){
         postsRepository.deleteAll();
         return 1L;
     }
