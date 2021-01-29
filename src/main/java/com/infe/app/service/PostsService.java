@@ -7,6 +7,7 @@ import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
 import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public class PostsService {
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) throws IllegalArgumentException{
         Posts posts = postsRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+                orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
 
@@ -37,7 +38,7 @@ public class PostsService {
     @Transactional(readOnly = true)
     public PostsResponseDto findById(Long id)throws IllegalArgumentException {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+                new IllegalArgumentException("해당 게시글이 없습니다."));
 
         return new PostsResponseDto(posts);
     }
@@ -51,12 +52,16 @@ public class PostsService {
 
     @Transactional
     public Long delete(Long id) throws IllegalArgumentException {
-        postsRepository.deleteById(id);
-        return id;
+        try {
+            postsRepository.deleteById(id);
+            return id;
+        }catch (EmptyResultDataAccessException e){
+            throw new IllegalArgumentException("해당 게시글이 없습니다.");
+        }
     }
 
     @Transactional
-    public Long deleteAll()throws IllegalArgumentException{
+    public Long deleteAll(){
         postsRepository.deleteAll();
         return 1L;
     }

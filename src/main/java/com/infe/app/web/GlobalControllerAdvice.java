@@ -3,6 +3,7 @@ package com.infe.app.web;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -40,9 +41,16 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler({NullPointerException.class})
     protected ResponseEntity<String> handleTimeoutException(NullPointerException e) {
-        log.warning("TimeoutException: " + e);
+        log.warning("NullPointerException: " + e);
 
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.warning("MethodArgumentNotValidException: " + e);
+
+        return new ResponseEntity<>("입력하지 않은 항목이 있습니다.", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({Exception.class})

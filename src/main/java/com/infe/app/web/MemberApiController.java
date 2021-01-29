@@ -7,36 +7,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Log
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/member/**")
 @RestController
 public class MemberApiController {
     public final MemberService memberService;
 
-    @PostMapping("/api/v1/member")
-    public Long insert(@RequestBody MemberRequestDto dto) throws Exception{
-        return memberService.insert(dto);
+    @PostMapping
+    public String insert(@Valid @RequestBody List<MemberRequestDto> dtos) throws Exception{
+        memberService.deleteAll();
+        return memberService.insertAll(dtos);
     }
 
-    @PutMapping("/api/v1/member/{id}")
-    public Long update(@PathVariable Long id, @RequestBody MemberRequestDto dto)throws Exception {
-        return memberService.update(id, dto);
-    }
-
-    @GetMapping("/api/v1/member/{id}")
-    public MemberResponseDto find(@PathVariable Long id)throws Exception {
-        return memberService.find(id);
-    }
-
-    @GetMapping("/api/v1/member/list")
+    @GetMapping("/list")
     public List<MemberResponseDto> findAll()throws Exception {
-        return memberService.findAll();
-    }
-
-    @DeleteMapping("/api/v1/member/{id}")
-    public Long delete(@PathVariable Long id)throws Exception {
-        return memberService.delete(id);
+        List<MemberResponseDto> dtos = memberService.findAll();
+        return dtos;
     }
 }

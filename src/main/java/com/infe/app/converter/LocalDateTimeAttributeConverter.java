@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 //     -AttributeConverter의 제네릭을 설정하고 아래 두 메소드를 오버라디으 해주면 된다.
 //     -autoApply=true : 글로벌하게 설정. 특정 속성에 이를 갖다쓴다는 @Convert(converter = ..._)를
 //                       등록 안해도 된다.
+/**LocalDateTime과 Timestamp**/
 @Converter(autoApply = true)
 public class LocalDateTimeAttributeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
 

@@ -14,9 +14,6 @@ import java.util.List;
 public class PostApiController {
     private final PostsService postsService;
 
-    /**나랑다른점: 조회 관련은 그냥 IndexController
-     * -> 어떤 이벤트가 아니라 페이지로딩시 바로 보여줘야돼서 그럴수도
-     * */
     //url에 insert, update,,넣지 않고 HttpMethod로 Post, Put, Get, Delete구분...
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody PostsSaveRequestDto requestDto)throws Exception {

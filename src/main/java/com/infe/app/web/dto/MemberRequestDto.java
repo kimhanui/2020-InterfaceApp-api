@@ -2,21 +2,39 @@ package com.infe.app.web.dto;
 
 import com.infe.app.domain.member.ManageStatus;
 import com.infe.app.domain.member.Member;
+import com.infe.app.domain.member.State;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.java.Log;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Map;
+
+@ToString
+@Log
 @NoArgsConstructor
 @Getter
 public class MemberRequestDto {
 
+    @NotEmpty
     private Long studentId;
+    @NotNull
     private String name;
+    @NotEmpty
     private Long generation;
+
     private String contact;
+
     private String phone;
+
     private String department;
-    private ManageStatus manageStatus;
+
+    private String state;
+
+    private Map<String, String> manageStatus;
 
     public Member toEntity() {
         return Member.builder()
@@ -26,24 +44,27 @@ public class MemberRequestDto {
                 .contact(contact)
                 .phone(phone)
                 .department(department)
-                .manageStatus(manageStatus)
+                .state(State.valueOfLabel(state))
+                .manageStatus(new ManageStatus(manageStatus))
                 .build();
     }
 
     @Builder
     public MemberRequestDto(Long studentId,
-                            String name,
-                            Long generation,
-                            String contact,
-                            String phone,
-                            String department,
-                            ManageStatus manageStatus) {
+            String name,
+            Long generation,
+            String contact,
+            String phone,
+            String department,
+            String state,
+            Map<String, String> manageStatus){
         this.studentId = studentId;
         this.name = name;
         this.generation = generation;
         this.contact = contact;
         this.phone = phone;
         this.department = department;
+        this.state = state;
         this.manageStatus = manageStatus;
     }
 }

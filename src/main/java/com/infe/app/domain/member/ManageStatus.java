@@ -3,52 +3,54 @@ package com.infe.app.domain.member;
 import com.infe.app.converter.BooleanToYNConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.java.Log;
 
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import java.util.HashMap;
+import java.util.Map;
 
-@ToString
+@Log
 @Getter
+@ToString
 @NoArgsConstructor
 @Embeddable
 public class ManageStatus {
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean firstDues; //회비 납부 여부
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean secondDues;
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean openingMeeting; //개총 참석 여부
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean finalMeeting; //종총 참석 여부
 
-    @Setter
-    @Enumerated(EnumType.STRING)
-    private State attendingStatus = State.ATTENDING; //재학(기본), 휴학, 군휴학
-
-    @Getter
-    @Convert(converter = BooleanToYNConverter.class)
-    private boolean firstDues = false; //회비 납부 여부
-    @Convert(converter = BooleanToYNConverter.class)
-    private boolean secondDues= false;
-    @Convert(converter = BooleanToYNConverter.class)
-    private boolean openingMeeting= false; //개총 참석 여부
-    @Convert(converter = BooleanToYNConverter.class)
-    private boolean finalMeeting= false; //종총 참석 여부
-
-    public ManageStatus(State type){
-        attendingStatus = type;
+    public ManageStatus(Map<String, String> data) {//entity
+        if (data == null) {
+            new ManageStatus(); // default false
+        } else {
+            this.firstDues = mapToBoolean(data.get("firstDues"));
+            this.secondDues = mapToBoolean(data.get("secondDues"));
+            this.openingMeeting = mapToBoolean(data.get("openingMeeting"));
+            this.finalMeeting = mapToBoolean(data.get("finalMeeting"));
+        }
     }
 
-    /**
-     * enum: AA("key1","key2","key3")으로 지정하고
-     * 필드 + 생성자 생성하면 이름 순서대로 매칭되는 것 같음
-    **/
-    @Getter
-    public enum State {
-        ATTENDING("재학"),
-        MILITARY("군휴학"),
-        REST("휴학"),
-        FREE("졸업");
-        private String value;
+    public Map<String, String> toDto() { //dto
+        Map<String, String> map = new HashMap<>();
+        map.put("firstDues", mapToOx(firstDues));
+        map.put("secondDues", mapToOx(secondDues));
+        map.put("openingMeeting", mapToOx(openingMeeting));
+        map.put("finalMeeting", mapToOx(finalMeeting));
+        return map;
+    }
 
-        State(String value){
-            this.value = value;
-        }
+    private String mapToOx(boolean b) {
+        return (b == true) ? "O" : "X";
+    }
+
+    private boolean mapToBoolean(String s) {
+        return s.equals("O");
     }
 }

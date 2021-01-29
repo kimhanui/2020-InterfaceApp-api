@@ -14,10 +14,11 @@ public class AdminRequestDto {
     private String passkey;
     private Double lat;
     private Double lon;
+    /**개선사항: 입력 없으면.now()로**/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime startTime;
+    private LocalDateTime startTime = LocalDateTime.now();
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime endTime;
+    private LocalDateTime endTime = LocalDateTime.now().plusMinutes(30L);
 
     @Builder
     public AdminRequestDto(String passkey,Double lat, Double lon, LocalDateTime startTime, LocalDateTime endTime){
