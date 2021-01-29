@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Log
@@ -17,7 +18,7 @@ public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping
-    public String insert(@RequestBody List<MemberRequestDto> dtos) throws Exception{
+    public String insert(@Valid @RequestBody List<MemberRequestDto> dtos) throws Exception{
         memberService.deleteAll();
         return memberService.insertAll(dtos);
     }

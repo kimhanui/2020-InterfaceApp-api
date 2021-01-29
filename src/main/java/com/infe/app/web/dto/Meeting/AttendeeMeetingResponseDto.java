@@ -1,9 +1,8 @@
 package com.infe.app.web.dto.Meeting;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.infe.app.domain.attendee.Attendee;
+import com.infe.app.domain.participant.Participant;
 import com.infe.app.domain.meeting.Meeting;
-import com.infe.app.domain.member.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ public class AttendeeMeetingResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdDateTime;
 
-    public AttendeeMeetingResponseDto(Attendee att, Meeting mt){
+    public AttendeeMeetingResponseDto(Participant att, Meeting mt){
         this.id = att.getId();
         this.studentId = att.getStudentId();
         this.name = att.getName();

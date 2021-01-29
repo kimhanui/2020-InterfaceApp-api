@@ -1,5 +1,6 @@
 package com.infe.app.web;
 
+import com.infe.app.service.AttendanceService;
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class MeetingApiController {
 
     private final MeetingService meetingService;
+    private final AttendanceService attendanceService;
 
     @PostMapping("/insert")
     public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
@@ -31,7 +33,7 @@ public class MeetingApiController {
 
     @PostMapping("/userCheck")
     public ResponseEntity<String> attendanceChecking(@Valid @RequestBody AttendanceRequestDto dto) throws Exception {
-        Long resId = meetingService.attendanceChecking(dto);
+        Long resId = attendanceService.attendanceChecking(dto);
         return new ResponseEntity<>(String.valueOf(resId), HttpStatus.OK);
     }
 
@@ -43,12 +45,12 @@ public class MeetingApiController {
 
     @GetMapping("/list/studentId") //회원별
     public List<MeetingResponseDto> findMeetingsByStudentId(@RequestParam Long studentId) throws Exception {
-        return meetingService.findMeetingsByStudentId(studentId);
+        return attendanceService.findAttendanceByStudentId(studentId);
     }
 
     @GetMapping("/list/passkey") //암호별
     public List<AttendanceResponseDto> findMembersByPassKey(@RequestParam String passkey) throws Exception {
-        return meetingService.findMembersByPasskey(passkey);
+        return attendanceService.findParticipantsByPasskey(passkey);
     }
 
     @GetMapping("/passkeys") //관리자가 생성한 passkey 조회(createdDateTime Desc정렬)
@@ -58,6 +60,6 @@ public class MeetingApiController {
 
     @DeleteMapping //passkey별
     public Long deletePasskey(@RequestBody Map<String,String> passkeyRequestData) throws Exception {
-        return meetingService.deleteByPasskey(passkeyRequestData.get("passkey"));
+        return attendanceService.deleteByPasskey(passkeyRequestData.get("passkey"));
     }
 }

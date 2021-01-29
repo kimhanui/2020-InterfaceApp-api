@@ -1,7 +1,6 @@
 package com.infe.app.domain.meeting;
 
-import com.infe.app.domain.attendee.Attendee;
-import com.infe.app.domain.member.Member;
+import com.infe.app.domain.attandance.Attendance;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +26,8 @@ public class Meeting {
 
     private Double lon;
 
-    @ManyToMany(mappedBy = "meetings")
-    private List<Attendee> attendees = new ArrayList<>();
+    @OneToMany(mappedBy = "meeting")
+    private List<Attendance> attendances = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdDateTime;

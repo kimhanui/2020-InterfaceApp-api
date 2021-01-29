@@ -14,9 +14,9 @@ import java.util.Map;
 @Getter
 public class MemberResponseDto {
     private Long id;
-    private Long studentId;
+    private String studentId;
     private String name;
-    private Long generation;
+    private String generation;
     private String contact;
     private String phone;
     private String department;
@@ -25,9 +25,9 @@ public class MemberResponseDto {
 
     public MemberResponseDto(Member m) {
         this.id = m.getId();
-        this.studentId = m.getStudentId();
+        this.studentId = Long.toString(m.getStudentId());
         this.name = m.getName();
-        this.generation = m.getGeneration();
+        this.generation = Long.toString(m.getGeneration());
         this.contact = m.getContact();
         this.phone = m.getPhone();
         this.department = m.getDepartment();
@@ -38,9 +38,9 @@ public class MemberResponseDto {
     public Member toEntity() {
         return Member.builder()
                 .id(id)
-                .studentId(studentId)
+                .studentId(Long.valueOf(studentId))
                 .name(name)
-                .generation(generation)
+                .generation(Long.valueOf(generation))
                 .contact(contact)
                 .phone(phone)
                 .department(department)

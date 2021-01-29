@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @ToString
@@ -19,13 +19,21 @@ import java.util.Map;
 @Getter
 public class MemberRequestDto {
 
+    @NotEmpty
     private Long studentId;
+    @NotNull
     private String name;
+    @NotEmpty
     private Long generation;
+
     private String contact;
+
     private String phone;
+
     private String department;
+
     private String state;
+
     private Map<String, String> manageStatus;
 
     public Member toEntity() {
@@ -39,14 +47,6 @@ public class MemberRequestDto {
                 .state(State.valueOfLabel(state))
                 .manageStatus(new ManageStatus(manageStatus))
                 .build();
-    }
-
-    public List<String> getBlank(){
-        List<String> blanks = new ArrayList<>();
-        if(studentId == null)blanks.add("studentId");
-        if(name == null) blanks.add("name");
-        if(generation == null) blanks.add("generation");
-        return blanks;
     }
 
     @Builder

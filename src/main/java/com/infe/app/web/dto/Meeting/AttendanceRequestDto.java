@@ -1,6 +1,6 @@
 package com.infe.app.web.dto.Meeting;
 
-import com.infe.app.domain.attendee.Attendee;
+import com.infe.app.domain.participant.Participant;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +37,8 @@ public class AttendanceRequestDto {
 
     private LocalDateTime dateTime = LocalDateTime.now();
 
-    public Attendee toEntity() {
-        return Attendee.builder()
+    public Participant toEntity() {
+        return Participant.builder()
                 .studentId(studentId)
                 .name(name)
                 .generation(generation)

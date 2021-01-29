@@ -1,10 +1,14 @@
 package com.infe.app.service;
 
-import com.infe.app.domain.attendee.Attendee;
-import com.infe.app.domain.attendee.AttendeeRepository;
+import com.infe.app.domain.attandance.Attendance;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
-import com.infe.app.web.dto.Meeting.*;
+import com.infe.app.domain.participant.Participant;
+import com.infe.app.domain.participant.ParticipantRepository;
+import com.infe.app.web.dto.Meeting.AdminRequestDto;
+import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
+import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
+import com.infe.app.web.dto.Meeting.MeetingResponseDto;
 import lombok.extern.java.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +37,10 @@ public class MeetingServiceTest {
     private MeetingService meetingService;
 
     @Autowired
-    private AttendeeRepository attendeeRepository;
+    private ParticipantRepository participantRepository;
+
+    @Autowired
+    private AttendanceService attendanceService;
 
     private final Double lat = 33.33;
     private final Double lon = 22.22;
@@ -105,7 +112,7 @@ public class MeetingServiceTest {
                 .build();
 
         //then
-        Long resId = meetingService.attendanceChecking(dto);
+        Long resId = attendanceService.attendanceChecking(dto);
 
         //when
         assertThat(resId).isGreaterThan(0L);
@@ -128,7 +135,7 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        meetingService.attendanceChecking(dto);
+        attendanceService.attendanceChecking(dto);
     }
 
     @Test(expected = TimeoutException.class)
@@ -147,7 +154,7 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        meetingService.attendanceChecking(dto);
+        attendanceService.attendanceChecking(dto);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -167,7 +174,7 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        meetingService.attendanceChecking(dto);
+        attendanceService.attendanceChecking(dto);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -187,7 +194,7 @@ public class MeetingServiceTest {
                 .build();
 
         //then, when
-        meetingService.attendanceChecking(dto);
+        attendanceService.attendanceChecking(dto);
     }
 
     @Test
@@ -196,7 +203,7 @@ public class MeetingServiceTest {
         Long studentId = 100100L;
 
         //when
-        List<MeetingResponseDto> list = meetingService.findMeetingsByStudentId(studentId);
+        List<MeetingResponseDto> list = attendanceService.findAttendanceByStudentId(studentId);
 
         //then
         assertThat(list.stream().map(MeetingResponseDto::getPasskey).collect(toList()))
@@ -209,7 +216,7 @@ public class MeetingServiceTest {
         String passkey = "VJ5FG";
 
         //when
-        List<AttendanceResponseDto> list = meetingService.findMembersByPasskey(passkey);
+        List<AttendanceResponseDto> list = attendanceService.findParticipantsByPasskey(passkey);
 
         //then
         assertThat(list.stream().map(AttendanceResponseDto::getName).collect(toList()))
@@ -257,14 +264,29 @@ public class MeetingServiceTest {
                 .generation(30L)
                 .passkey(targetPasskey)
                 .build();
-        meetingService.attendanceChecking(attendanceRequestDto);
+        attendanceService.attendanceChecking(attendanceRequestDto);
+
+        log.info("check-1");
 
         //when
-        meetingService.deleteByPasskey(targetPasskey);
-        Attendee attendee = attendeeRepository.findByStudentId(100100L).get();
+        try {
+            attendanceService.deleteByPasskey(targetPasskey);
+        }
+        catch(Exception e)
+        {
+            log.warning("deleteByPasskey실패:"+e.getMessage());
+        }
+        Participant participant = participantRepository.findByStudentId(100100L).get();
+        log.info("check-2");
+        log.info(meetingService.findAllPasskeys()
+                .stream()
+                .map(MeetingResponseDto::getPasskey)
+                .collect(Collectors.toList())
+                .toString());
 
         //then
-        assertThat(attendee.getMeetings().stream()
+        assertThat(participant.getAttendances().stream()
+                .map(Attendance::getMeeting)
                 .map(Meeting::getPasskey)
                 .collect(Collectors.toList())).doesNotContain(targetPasskey);
     }

@@ -24,14 +24,6 @@ public class MemberService {
      **/
     @Transactional
     public String insertAll(List<MemberRequestDto> dtos) {
-
-        List<Long> list = dtos.stream()
-                .filter(dto -> !dto.getBlank().equals(""))
-                .map(MemberRequestDto::getStudentId)
-                .collect(Collectors.toList());
-        if (!list.isEmpty())
-            throw new NullPointerException("입력하지 않은 항목이 다음 회원 목록에 존재합니다. " + list);
-
         memberRepository.saveAll(dtos.stream().map(MemberRequestDto::toEntity).collect(Collectors.toList()));
         return "정상적으로 저장됐습니다.";
     }

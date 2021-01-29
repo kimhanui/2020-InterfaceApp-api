@@ -1,6 +1,6 @@
-package com.infe.app.domain.attendee;
+package com.infe.app.domain.participant;
 
-import com.infe.app.domain.meeting.Meeting;
+import com.infe.app.domain.attandance.Attendance;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,30 +16,27 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Attendee {
+public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private Long studentId;
 
     private String name;
 
     private Long generation;
 
+    @Column(unique = true)
     private String token;
 
-    @JoinTable(name = "attendee_meeting"
-            , joinColumns = {@JoinColumn(name = "attendee_id")}
-            , inverseJoinColumns = {@JoinColumn(name = "meeting_id")})
-    @ManyToMany
-    private List<Meeting> meetings = new ArrayList<>();
+    @OneToMany(mappedBy = "participant")
+    private List<Attendance> attendances= new ArrayList<>();
 
-    public void addMeeting(Meeting meeting) {
-        if (!this.meetings.contains(meeting)) {
-            this.meetings.add(meeting);
-            if (!meeting.getAttendees().contains(this))
-                meeting.getAttendees().add(this);
+    public void addAttendance(Attendance attendance) {
+        if (!this.attendances.contains(attendance)) {
+            this.attendances.add(attendance);
         }
     }
 
@@ -48,7 +45,7 @@ public class Attendee {
     }
 
     @Builder
-    public Attendee(Long studentId, String name, Long generation, String token) {
+    public Participant(Long studentId, String name, Long generation, String token) {
         this.studentId = studentId;
         this.name = name;
         this.generation = generation;

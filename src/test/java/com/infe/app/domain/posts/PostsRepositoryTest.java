@@ -20,7 +20,7 @@ public class PostsRepositoryTest {
     @Autowired
     PostsRepository postsRepository;
 
-    @After//이거 괜찮네!
+    @After
     public void tearDown() throws Exception{
         postsRepository.deleteAll();
     }
