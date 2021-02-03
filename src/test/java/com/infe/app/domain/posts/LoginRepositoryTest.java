@@ -21,12 +21,16 @@ public class LoginRepositoryTest {
     LoginRepository loginRepository;
 
     @Test
-    public void findByRole() {
+    public void 로그인_성공() {
         //given
-        Login.Role role = Login.Role.ADMIN;
-        Optional<Login> login = loginRepository.findByRole(role);
+        String password_admin = "interfaceAdmin";
+        String password_user = "interfaceUser";
+        Optional<Login> admin = loginRepository.findByPassword(password_admin);
+        Optional<Login> user = loginRepository.findByPassword(password_user);
+
 
         //when, then
-        assertThat(login.get().getPw()).isEqualTo("interfaceAdmin");
+        assertThat(admin.get().getRole()).isEqualTo(Login.Role.ADMIN);
+        assertThat(user.get().getRole()).isEqualTo(Login.Role.USER);
     }
 }

@@ -16,14 +16,10 @@ public class LoginService {
     private final LoginRepository loginRepository;
 
     @Transactional(readOnly = true)
-    public boolean login(LoginDto loginDto) throws IllegalArgumentException, NullPointerException {
-        Login.Role role = Login.Role.valueOfLabel(loginDto.getRole());
-        String pw = loginDto.getPw();
+    public String login(String pw) throws IllegalArgumentException {
+        Login login = loginRepository.findByPassword(pw).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("권한 종류")));
 
-        Login login = loginRepository.findByRole(role).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("권한 종류")));
-        String SAVEDPW  = login.getPw();
-
-        return (pw.equals(SAVEDPW))? true: false;
+        return login.getRole().getValue();
     }
 
     @Transactional

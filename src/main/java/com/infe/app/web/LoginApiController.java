@@ -20,9 +20,10 @@ public class LoginApiController {
     private final LoginService loginService;
 
     @PostMapping
-    public String login(@RequestBody LoginDto loginDto) {
-        boolean result = loginService.login(loginDto);
-        return (result == true) ? "login success" : "login failed";
+    public String login(@RequestBody Map<String, String> passwordRaw) {
+        String password = passwordRaw.get("pw");
+        String result = loginService.login(password);
+        return result+"(으)로 로그인됐습니다.";
     }
 
     @PostMapping("/update")
