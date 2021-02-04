@@ -56,7 +56,7 @@ public class MemberApiControllerTest {
         String url = "http://localhost:" + port + "/api/v1/member";
 
         // when
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders(); //헤더 추가: text/plain;charset=UTF-8 인코딩용
         MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
         headers.setContentType(mediaType);
 
