@@ -107,9 +107,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
         Long id = meeting.getId();
 
-//        log.info("[MeetingService - deleteByPasskey]:" + meeting.getAttendances().toString());
-
-        attendanceRepository.deleteAllByMeeting_Id(meeting.getId());
+        attendanceRepository.deleteAllByMeetingId(meeting.getId());
         meetingRepository.delete(meeting);
         return id;
     }

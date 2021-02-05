@@ -4,8 +4,10 @@ import com.infe.app.domain.attandance.Attendance;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class Participant {
 
     @Column(unique = true)
     private String token;
+
+    @CreatedDate
+    private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "participant")
     private List<Attendance> attendances= new ArrayList<>();

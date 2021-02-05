@@ -29,7 +29,7 @@ public class AttendanceServiceTest {
     public void meeting_id로_attendance_조회하기() {
         //given
         Long id = 1L;
-        List<Attendance> attendance_before = attendanceRepository.findAllByMeeting_Id(id);
+        List<Attendance> attendance_before = attendanceRepository.findAllByMeetingId(id);
         log.info("before:" + attendance_before.stream()
                 .map(Attendance::getParticipant)
                 .map(Participant::getStudentId)
@@ -41,19 +41,19 @@ public class AttendanceServiceTest {
     public void meeting_id로_attendance_삭제하면_참석자에게서도_조회불가() {
         //given
         Long id = 1L;
-        List<Attendance> attendance_before = attendanceRepository.findAllByMeeting_Id(id);
+        List<Attendance> attendance_before = attendanceRepository.findAllByMeetingId(id);
         List<Long> participantIds = attendance_before.stream()
                 .map(Attendance::getParticipant)
                 .map(Participant::getId)
                 .collect(Collectors.toList());
 
         //when
-        attendanceRepository.deleteAllByMeeting_Id(id);
+        attendanceRepository.deleteAllByMeetingId(id);
 
         //then
         participantIds.stream().forEach(
                 i -> {
-                    attendanceRepository.findAllByParticipant_Id(i).stream().forEach(
+                    attendanceRepository.findAllByParticipantId(i).stream().forEach(
                             a -> {
                                 assertThat(a.getId()).isNotEqualTo(1L);
                             }

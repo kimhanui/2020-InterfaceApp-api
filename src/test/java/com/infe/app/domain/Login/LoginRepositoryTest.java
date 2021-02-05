@@ -1,4 +1,4 @@
-package com.infe.app.domain.posts;
+package com.infe.app.domain.Login;
 
 import com.infe.app.domain.login.Login;
 import com.infe.app.domain.login.LoginRepository;

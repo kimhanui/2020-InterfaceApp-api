@@ -27,7 +27,6 @@ public class MeetingApiController {
 
     @PostMapping("/insert")
     public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
-        log.info(dto.toString());
         return meetingService.insertMeeting(dto);
     }
 

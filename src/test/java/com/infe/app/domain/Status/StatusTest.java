@@ -1,4 +1,4 @@
-package com.infe.app.domain.posts;
+package com.infe.app.domain.Status;
 
 import com.infe.app.domain.member.State;
 import lombok.extern.java.Log;
