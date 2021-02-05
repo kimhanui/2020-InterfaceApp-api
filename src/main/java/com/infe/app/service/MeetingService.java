@@ -24,16 +24,14 @@ public class MeetingService {
 
     @Transactional
     public Long insertMeeting(AdminRequestDto dto) throws IllegalArgumentException {
-        log.info(dto.toString());
         Optional<Meeting> target = meetingRepository.findByPasskey(dto.getPasskey());
         target.ifPresent(val -> {
             throw new IllegalArgumentException("이미 존재하는 출석키 입니다.");
         }); //출석키 중복확인
 
-        if(!dto.getStartTime().isAfter(LocalDateTime.now())){
+        if (dto.getStartTime()!=null && dto.getStartTime().isBefore(LocalDateTime.now().minusMinutes(1L))) {
             throw new IllegalArgumentException("현재보다 이른시각에 모임생성할 수 없습니다.");
         }
-
         return meetingRepository.save(dto.toEntity()).getId();
     }
 
@@ -48,7 +46,7 @@ public class MeetingService {
     public List<MeetingResponseDto> findAllPasskeys() {
         return meetingRepository.findAllByDesc()
                 .stream()
-                .sorted((m1, m2) -> m1.getCreatedDateTime().isAfter(m2.getCreatedDateTime())?1:0) //최신순
+                .sorted((m1, m2) -> m1.getCreatedDateTime().isAfter(m2.getCreatedDateTime()) ? 1 : 0) //최신순
                 .map(MeetingResponseDto::new)
                 .collect(toList());
     }

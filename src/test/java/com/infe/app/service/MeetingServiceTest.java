@@ -87,7 +87,6 @@ public class MeetingServiceTest {
         AdminRequestDto meetingDto = AdminRequestDto.builder()
                 .passkey(inputValue)
                 .startTime(LocalDateTime.of(2020, 11, 11, 0, 0, 0))
-                .endTime(LocalDateTime.of(2020, 11, 11, 1, 0, 0))
                 .lat(lat)
                 .lon(lon)
                 .build();
@@ -249,7 +248,6 @@ public class MeetingServiceTest {
                 .lat(lat)
                 .lon(lon)
                 .startTime(LocalDateTime.now())
-                .endTime(LocalDateTime.now().plusHours(1L))
                 .build();
         meetingService.insertMeeting(adminRequestDto);
 
