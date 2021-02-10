@@ -11,6 +11,7 @@ import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
 import com.infe.app.web.dto.Meeting.MeetingResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+@Log
 @RequiredArgsConstructor
 @Service
 public class AttendanceService {
@@ -30,26 +32,29 @@ public class AttendanceService {
 
     @Transactional
     public Long attendanceChecking(AttendanceRequestDto dto) throws IllegalArgumentException, TimeoutException {
+        log.info(dto.toString());
         //passkey 확인
         Meeting meeting = meetingRepository.findByPasskey(dto.getPasskey())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
 
         //토큰 유일성 확인(대리출석 방지)
         Participant participant = participantRepository.findByStudentId(dto.getStudentId()).orElse(null);
-        if (participant == null) { //만료된 토큰이라 없는지 확인
+        if (participant == null || !(participant.getToken().equals(dto.getToken()))){
             boolean isUnique = participantRepository.findAll().stream()
                     .map(Participant::getToken)
                     .noneMatch(t -> dto.getToken().equals(t));
-            if (isUnique) //유일한 토큰이면 새로 저장(아직 출석아님)
+            if (isUnique) //토큰유일성 확인
                 participant = participantRepository.save(dto.toEntity());
             else throw new IllegalArgumentException("이미 사용중인 토큰입니다.");
         }
+
+
         //중복 출석 방지
         List<Participant> participantList = meeting.getAttendances()
                 .stream()
                 .map(Attendance::getParticipant)
                 .collect(Collectors.toList());
-        if(participantList.contains(participant))
+        if (participantList.contains(participant))
             throw new IllegalArgumentException("이미 출석되었습니다.");
 
 

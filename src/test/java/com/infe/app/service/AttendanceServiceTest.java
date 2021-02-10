@@ -3,6 +3,8 @@ package com.infe.app.service;
 import com.infe.app.domain.attandance.Attendance;
 import com.infe.app.domain.attandance.AttendanceRepository;
 import com.infe.app.domain.participant.Participant;
+import com.infe.app.domain.participant.ParticipantRepository;
+import com.infe.app.web.dto.Meeting.AdminRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
 import com.infe.app.web.dto.Meeting.MeetingResponseDto;
@@ -35,20 +37,33 @@ public class AttendanceServiceTest {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private ParticipantRepository participantRepository;
+
+    @Autowired
+    private MeetingService meetingService;
+
     private final Double lat = 33.33;
     private final Double lon = 22.22;
 
     @Test
     public void 참석자_올바른출석암호_인증성공한다() throws TimeoutException {
         //given
-        String passkey = "VJ5FG";
+        AdminRequestDto adminRequestDto = AdminRequestDto.builder()
+                .passkey("AAAAA")
+                .lat(lat)
+                .lon(lon)
+                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .build();
+        meetingService.insertMeeting(adminRequestDto);
+
         AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .passkey("AAAAA")
                 .token("TOKEN1")
+                .dateTime(LocalDateTime.of(2021,2,11,13,10))
                 .lat(lat)
                 .lon(lon)
                 .build();
@@ -64,14 +79,14 @@ public class AttendanceServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void 참석자_틀린출석암호_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
-        String passkey = "SSD2KKKK";
+        String wrongPasskey = "SSD2KKKK";
         AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .passkey(wrongPasskey)
                 .token("TOKEN1")
+                .dateTime(LocalDateTime.of(2021,2,11,13,10))
                 .lat(lat)
                 .lon(lon)
                 .build();
@@ -89,10 +104,10 @@ public class AttendanceServiceTest {
                 .name("kim")
                 .generation(30L)
                 .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 11, 11, 3, 00, 0))
                 .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
+                .dateTime(LocalDateTime.of(2021,2,11,13,10))
                 .build();
 
         //then, when
@@ -102,17 +117,24 @@ public class AttendanceServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void 참석자_위치인증오류_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
+        AdminRequestDto adminRequestDto = AdminRequestDto.builder()
+                .passkey("AAAAA")
+                .lat(lat)
+                .lon(lon)
+                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .build();
+        meetingService.insertMeeting(adminRequestDto);
+
         Double wrongLat = 55.55;
-        String passkey = "VJ5FG";
         AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .passkey("AAAAA")
                 .token("TOKEN1")
                 .lat(wrongLat)
                 .lon(lon)
+                .dateTime(LocalDateTime.of(2021,2,11,13,10))
                 .build();
 
         //then, when
@@ -122,21 +144,41 @@ public class AttendanceServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void 참석자_본인토큰이_아닌_토큰중복으로_인증실패한다() throws IllegalArgumentException, TimeoutException {
         //given
-        Double wrongLat = 55.55;
-        String passkey = "VJ5FG";
+        AdminRequestDto adminRequestDto = AdminRequestDto.builder()
+                .passkey("AAAAA")
+                .lat(lat)
+                .lon(lon)
+                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .build();
+        meetingService.insertMeeting(adminRequestDto);
+
         AttendanceRequestDto dto = AttendanceRequestDto.builder()
                 .studentId(100100L)
                 .name("kim")
                 .generation(30L)
-                .passkey(passkey)
-                .dateTime(LocalDateTime.of(2020, 9, 9, 0, 30, 0))
+                .passkey("AAAAA")
                 .token("TOKEN2")
-                .lat(wrongLat)
+                .lat(lat)
                 .lon(lon)
+                .dateTime(LocalDateTime.of(2021,2,11,13,10))
                 .build();
 
         //then, when
         attendanceService.attendanceChecking(dto);
+    }
+
+    @Test
+    public void 다른사람의_토큰_사용하면_false반환(){
+        //given
+        String targetToken= "TOKEN4";
+
+        //when
+        boolean isUnique = participantRepository.findAll().stream()
+                .map(Participant::getToken)
+                .noneMatch(t -> targetToken.equals(t));
+
+        //then
+        assertThat(isUnique).isEqualTo(false);
     }
     @Test
     public void passkey로_attendance_조회하기() {

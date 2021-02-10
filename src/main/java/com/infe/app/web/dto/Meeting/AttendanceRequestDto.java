@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 public class AttendanceRequestDto {
 
+    @NotNull
     private Long studentId;
 
     @NotEmpty //null과 ""거부
