@@ -32,3 +32,5 @@ insert into attendance(meeting_id, participant_id, attendance_date_time) values(
 
 insert into login(role, pw) values('ADMIN','interfaceAdmin');
 insert into login(role, pw) values('USER','interfaceUser');
+
+insert into calendar(date, title, content) values('2020-08-13', '종강총회','종강총회기념코딩합시다')

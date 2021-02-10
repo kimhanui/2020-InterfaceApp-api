@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log
@@ -20,19 +21,21 @@ import java.util.stream.Collectors;
 public class CalendarService {
     private final CalendarRepository calendarRepository;
     @Transactional
-    public Long insert(CalendarRequestDto calendarRequestDto) {
+    public Long insert(CalendarRequestDto calendarRequestDto) throws IllegalArgumentException{
+        Optional<Calendar> calendar = calendarRepository.findByDate(calendarRequestDto.getDate());//.orElseThrow(()->new IllegalArgumentException(ErrorMessage.NoExist("일정")));
+        calendar.ifPresent(v->{throw new IllegalArgumentException(ErrorMessage.AlreadyExist("일정"));});
         return calendarRepository.save(calendarRequestDto.toEntity()).getId();
     }
     @Transactional
     public Long update(Long id, CalendarRequestDto calendarRequestDto) throws IllegalArgumentException{
-        Calendar calendar = calendarRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 일정입니다."));
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(()->new IllegalArgumentException(ErrorMessage.NoExist("일정")));
         log.info(calendar.toString());
         calendar.update(calendarRequestDto.toEntity());
         return calendar.getId();
     }
     @Transactional(readOnly = true)
     public CalendarResponseDto find(Long id) throws IllegalArgumentException{
-        Calendar calendar = calendarRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 일정입니다."));
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(()->new IllegalArgumentException(ErrorMessage.NoExist("일정")));
         log.info(calendar.toString());
         return new CalendarResponseDto(calendar);
     }

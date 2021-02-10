@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Log
 @RequiredArgsConstructor
@@ -18,7 +19,8 @@ public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping
-    public String insert(@Valid @RequestBody List<MemberRequestDto> dtos) throws Exception{
+    public String insert(@Valid @RequestBody Map<String, List<MemberRequestDto>> dtosRaw) throws Exception{
+        List<MemberRequestDto> dtos = dtosRaw.get("collection");
         memberService.deleteAll();
         return memberService.insertAll(dtos);
     }

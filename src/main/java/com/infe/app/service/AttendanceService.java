@@ -2,10 +2,10 @@ package com.infe.app.service;
 
 import com.infe.app.domain.attandance.Attendance;
 import com.infe.app.domain.attandance.AttendanceRepository;
-import com.infe.app.domain.participant.ParticipantRepository;
-import com.infe.app.domain.participant.Participant;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
+import com.infe.app.domain.participant.Participant;
+import com.infe.app.domain.participant.ParticipantRepository;
 import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
@@ -30,7 +30,6 @@ public class AttendanceService {
 
     @Transactional
     public Long attendanceChecking(AttendanceRequestDto dto) throws IllegalArgumentException, TimeoutException {
-
         //passkey 확인
         Meeting meeting = meetingRepository.findByPasskey(dto.getPasskey())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
@@ -75,7 +74,6 @@ public class AttendanceService {
         return attendanceRepository.save(attendance).getId();
     }
 
-    //출석시간 추가
     @Transactional(readOnly = true)
     public List<MeetingResponseDto> findAttendanceByStudentId(Long studentId) {
         return participantRepository.findByStudentId(studentId)
@@ -87,7 +85,6 @@ public class AttendanceService {
                 .sorted((m1, m2) -> m1.getStartTime().isBefore(m2.getStartTime()) ? 1 : 0)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional(readOnly = true)
     public List<AttendanceResponseDto> findParticipantsByPasskey(String passkey) {
@@ -107,9 +104,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
         Long id = meeting.getId();
 
-//        log.info("[MeetingService - deleteByPasskey]:" + meeting.getAttendances().toString());
-
-        attendanceRepository.deleteAllByMeeting_Id(meeting.getId());
+        attendanceRepository.deleteAllByMeetingId(meeting.getId());
         meetingRepository.delete(meeting);
         return id;
     }

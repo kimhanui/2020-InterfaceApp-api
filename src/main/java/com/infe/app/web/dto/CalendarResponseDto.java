@@ -10,12 +10,14 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class CalendarResponseDto {
+    private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate date;
     private String title;
     private String content;
 
     public CalendarResponseDto(Calendar calendar){
+        this.id = calendar.getId();
         this.title = calendar.getTitle();
         this.date = calendar.getDate();
         this.content = calendar.getContent();

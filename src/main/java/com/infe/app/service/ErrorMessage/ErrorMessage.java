@@ -11,7 +11,7 @@ public class ErrorMessage {
         return "존재하지 않는 "+target+" 입니다.";
     }
 
-    public static String NoMatch(String target){
-        return target+"가 일치하지 않습니다.";
+    public static String AlreadyExist(String target){
+        return "이미 존재하는 "+target+" 입니다.";
     }
 }

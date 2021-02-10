@@ -1,8 +1,8 @@
 package com.infe.app.web.dto.Meeting;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.infe.app.domain.participant.Participant;
 import com.infe.app.domain.meeting.Meeting;
+import com.infe.app.domain.participant.Participant;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

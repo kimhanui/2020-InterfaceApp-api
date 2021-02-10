@@ -2,6 +2,7 @@ package com.infe.app.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.infe.app.domain.calendar.Calendar;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,5 +22,12 @@ public class CalendarRequestDto {
                 .title(title)
                 .content(content)
                 .build();
+    }
+
+    @Builder
+    public CalendarRequestDto(LocalDate date, String title, String content){
+        this.date = date;
+        this.title = title;
+        this.content = content;
     }
 }

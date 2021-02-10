@@ -3,9 +3,9 @@ package com.infe.app.web;
 import com.infe.app.service.AttendanceService;
 import com.infe.app.service.MeetingService;
 import com.infe.app.web.dto.Meeting.AdminRequestDto;
+import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;
 import com.infe.app.web.dto.Meeting.MeetingResponseDto;
-import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,6 @@ public class MeetingApiController {
 
     @PostMapping("/insert")
     public Long insertMeeting(@RequestBody AdminRequestDto dto) throws Exception {
-        log.info(dto.toString());
         return meetingService.insertMeeting(dto);
     }
 
