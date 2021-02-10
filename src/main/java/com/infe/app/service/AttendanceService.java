@@ -2,10 +2,10 @@ package com.infe.app.service;
 
 import com.infe.app.domain.attandance.Attendance;
 import com.infe.app.domain.attandance.AttendanceRepository;
-import com.infe.app.domain.participant.ParticipantRepository;
-import com.infe.app.domain.participant.Participant;
 import com.infe.app.domain.meeting.Meeting;
 import com.infe.app.domain.meeting.MeetingRepository;
+import com.infe.app.domain.participant.Participant;
+import com.infe.app.domain.participant.ParticipantRepository;
 import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.Meeting.AttendanceRequestDto;
 import com.infe.app.web.dto.Meeting.AttendanceResponseDto;

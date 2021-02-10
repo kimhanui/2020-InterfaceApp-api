@@ -1,7 +1,10 @@
 package com.infe.app.web;
 
 import com.infe.app.service.PostsService;
-import com.infe.app.web.dto.*;
+import com.infe.app.web.dto.PostsListResponseDto;
+import com.infe.app.web.dto.PostsResponseDto;
+import com.infe.app.web.dto.PostsSaveRequestDto;
+import com.infe.app.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
