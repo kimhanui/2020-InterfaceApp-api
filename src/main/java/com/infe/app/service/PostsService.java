@@ -2,6 +2,7 @@ package com.infe.app.service;
 
 import com.infe.app.domain.posts.Posts;
 import com.infe.app.domain.posts.PostsRepository;
+import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.PostsListResponseDto;
 import com.infe.app.web.dto.PostsResponseDto;
 import com.infe.app.web.dto.PostsSaveRequestDto;
@@ -28,7 +29,7 @@ public class PostsService {
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) throws IllegalArgumentException{
         Posts posts = postsRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("게시글")));
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
 
@@ -38,7 +39,7 @@ public class PostsService {
     @Transactional(readOnly = true)
     public PostsResponseDto findById(Long id)throws IllegalArgumentException {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 없습니다."));
+                new IllegalArgumentException(ErrorMessage.NoExist("게시글")));
 
         return new PostsResponseDto(posts);
     }
@@ -56,7 +57,7 @@ public class PostsService {
             postsRepository.deleteById(id);
             return id;
         }catch (EmptyResultDataAccessException e){
-            throw new IllegalArgumentException("해당 게시글이 없습니다.");
+            throw new IllegalArgumentException(ErrorMessage.NoExist("게시글"));
         }
     }
 

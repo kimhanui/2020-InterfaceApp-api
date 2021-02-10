@@ -26,7 +26,7 @@ public class MeetingService {
     public Long insertMeeting(AdminRequestDto dto) throws IllegalArgumentException {
         Optional<Meeting> target = meetingRepository.findByPasskey(dto.getPasskey());
         target.ifPresent(val -> {
-            throw new IllegalArgumentException("이미 존재하는 출석키 입니다.");
+            throw new IllegalArgumentException(ErrorMessage.AlreadyExist("출석키"));
         }); //출석키 중복확인
 
         if (dto.getStartTime()!=null && dto.getStartTime().isBefore(LocalDateTime.now().minusMinutes(1L))) {

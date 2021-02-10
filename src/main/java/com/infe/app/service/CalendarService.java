@@ -23,7 +23,7 @@ public class CalendarService {
     @Transactional
     public Long insert(CalendarRequestDto calendarRequestDto) throws IllegalArgumentException{
         Optional<Calendar> calendar = calendarRepository.findByDate(calendarRequestDto.getDate());//.orElseThrow(()->new IllegalArgumentException(ErrorMessage.NoExist("일정")));
-        calendar.ifPresent(v->{throw new IllegalArgumentException("이미 존재하는 일정입니다.");});
+        calendar.ifPresent(v->{throw new IllegalArgumentException(ErrorMessage.AlreadyExist("일정"));});
         return calendarRepository.save(calendarRequestDto.toEntity()).getId();
     }
     @Transactional
