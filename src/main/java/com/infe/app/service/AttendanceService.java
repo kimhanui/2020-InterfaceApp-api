@@ -30,7 +30,6 @@ public class AttendanceService {
 
     @Transactional
     public Long attendanceChecking(AttendanceRequestDto dto) throws IllegalArgumentException, TimeoutException {
-
         //passkey 확인
         Meeting meeting = meetingRepository.findByPasskey(dto.getPasskey())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("출석키")));
@@ -75,7 +74,6 @@ public class AttendanceService {
         return attendanceRepository.save(attendance).getId();
     }
 
-    //출석시간 추가
     @Transactional(readOnly = true)
     public List<MeetingResponseDto> findAttendanceByStudentId(Long studentId) {
         return participantRepository.findByStudentId(studentId)
@@ -87,7 +85,6 @@ public class AttendanceService {
                 .sorted((m1, m2) -> m1.getStartTime().isBefore(m2.getStartTime()) ? 1 : 0)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional(readOnly = true)
     public List<AttendanceResponseDto> findParticipantsByPasskey(String passkey) {
