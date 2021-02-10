@@ -41,6 +41,7 @@ public class MemberServiceTest {
         //when,then
         memberRepository.deleteAllInBatch();
     }
+
     @Test
     public void DB에저장할때_참석여부_boolean에서_YN로_변환됨() {
         //given
