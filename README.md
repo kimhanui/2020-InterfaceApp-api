@@ -11,10 +11,11 @@
 - Sub: 동아리 공지/일정/명부 CRUD
 
 ### Development Enviroment
-- Lang/Framework: Java(Jdk1.8), Spring boot 2.1.7
+- Lang/Framework: Java(Jdk1.8) / Spring boot 2.1.7
 - ORM: JPA
 - IDE: Intellij 2018.3.2
 - Build tool: Gradle 4.x ([6.x에서 하향조정 이슈](https://github.com/kimhanui/2020-InterfaceApp-api/issues/1#issue-672857407))
 - Test: Junit4
 - 협업툴: Github, KakaoTalk
 - Deploy: Heroku, JawsDB-Maria
+- API문서: [Postman에서 작성](https://documenter.getpostman.com/view/6436497/TVCfV8CU)
