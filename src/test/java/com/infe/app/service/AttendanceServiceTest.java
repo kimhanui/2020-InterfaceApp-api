@@ -53,7 +53,7 @@ public class AttendanceServiceTest {
                 .passkey("AAAAA")
                 .lat(lat)
                 .lon(lon)
-                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .startTime(LocalDateTime.now())
                 .build();
         meetingService.insertMeeting(adminRequestDto);
 
@@ -63,7 +63,7 @@ public class AttendanceServiceTest {
                 .generation(30L)
                 .passkey("AAAAA")
                 .token("TOKEN1")
-                .dateTime(LocalDateTime.of(2021,2,11,13,10))
+                .dateTime(LocalDateTime.now().plusMinutes(10L))
                 .lat(lat)
                 .lon(lon)
                 .build();
@@ -86,7 +86,7 @@ public class AttendanceServiceTest {
                 .generation(30L)
                 .passkey(wrongPasskey)
                 .token("TOKEN1")
-                .dateTime(LocalDateTime.of(2021,2,11,13,10))
+                .dateTime(LocalDateTime.now())
                 .lat(lat)
                 .lon(lon)
                 .build();
@@ -107,7 +107,7 @@ public class AttendanceServiceTest {
                 .token("TOKEN1")
                 .lat(lat)
                 .lon(lon)
-                .dateTime(LocalDateTime.of(2021,2,11,13,10))
+                .dateTime(LocalDateTime.now())
                 .build();
 
         //then, when
@@ -121,7 +121,7 @@ public class AttendanceServiceTest {
                 .passkey("AAAAA")
                 .lat(lat)
                 .lon(lon)
-                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .startTime(LocalDateTime.now())
                 .build();
         meetingService.insertMeeting(adminRequestDto);
 
@@ -134,7 +134,7 @@ public class AttendanceServiceTest {
                 .token("TOKEN1")
                 .lat(wrongLat)
                 .lon(lon)
-                .dateTime(LocalDateTime.of(2021,2,11,13,10))
+                .dateTime(LocalDateTime.now().plusMinutes(10L))
                 .build();
 
         //then, when
@@ -148,7 +148,7 @@ public class AttendanceServiceTest {
                 .passkey("AAAAA")
                 .lat(lat)
                 .lon(lon)
-                .startTime(LocalDateTime.of(2021,2,11,13,00))
+                .startTime(LocalDateTime.now())
                 .build();
         meetingService.insertMeeting(adminRequestDto);
 
@@ -160,7 +160,7 @@ public class AttendanceServiceTest {
                 .token("TOKEN2")
                 .lat(lat)
                 .lon(lon)
-                .dateTime(LocalDateTime.of(2021,2,11,13,10))
+                .dateTime(LocalDateTime.now().plusMinutes(10L))
                 .build();
 
         //then, when
@@ -254,5 +254,4 @@ public class AttendanceServiceTest {
                     );
                 });
     }
-
 }
