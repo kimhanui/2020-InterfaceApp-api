@@ -1,5 +1,6 @@
 # 인페체크 서버API  [![Build Status](https://travis-ci.com/kimhanui/2020-InterfaceApp-api.svg?branch=dev)](https://travis-ci.com/kimhanui/2020-InterfaceApp-api) [![Coverage Status](https://coveralls.io/repos/github/kimhanui/2020-InterfaceApp-api/badge.svg?branch=dev)](https://coveralls.io/github/kimhanui/2020-InterfaceApp-api?branch=dev)
-> 🌍 Development Server: https://interface-app-dev.herokuapp.com/
+> 🌍 Development Server: https://interface-app-dev.herokuapp.com/  
+> 📜 [API Doc](https://documenter.getpostman.com/view/6436497/TVCfV8CU)
 
 세종대학교 컴퓨터 학술 동아리 인터페이스의 서버API입니다.
 
@@ -20,4 +21,4 @@
 - Test: Junit4
 - 협업툴: Github, KakaoTalk
 - Deploy: Heroku, JawsDB-Maria
-- API문서: [Postman에서 작성](https://documenter.getpostman.com/view/6436497/TVCfV8CU)
+- API문서: Postman
