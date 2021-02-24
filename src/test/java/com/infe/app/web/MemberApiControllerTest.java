@@ -53,7 +53,7 @@ public class MemberApiControllerTest {
         String input = "{\"collection\":"+stringdtos+"}";
 
         log.info(input.toString());
-        String url = "http://localhost:" + port + "/api/v1/member";
+        String url = "http://localhost:" + port + "/api/v1/member/list";
 
         // when
         HttpHeaders headers = new HttpHeaders(); //헤더 추가: text/plain;charset=UTF-8 인코딩용

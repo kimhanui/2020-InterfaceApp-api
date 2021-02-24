@@ -1,6 +1,8 @@
 package com.infe.app.service;
 
+import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
+import com.infe.app.service.ErrorMessage.ErrorMessage;
 import com.infe.app.web.dto.MemberRequestDto;
 import com.infe.app.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log
@@ -23,9 +26,27 @@ public class MemberService {
      * sql 전달 전 미리 예외 catch해서 정상적인 입력만 insert해야할듯
      **/
     @Transactional
-    public String insertAll(List<MemberRequestDto> dtos) {
-        memberRepository.saveAll(dtos.stream().map(MemberRequestDto::toEntity).collect(Collectors.toList()));
-        return "정상적으로 저장됐습니다.";
+    public Long insert(MemberRequestDto dto) throws IllegalArgumentException {
+        Optional<Member> member = memberRepository.findByStudentId(dto.getStudentId());
+        member.ifPresent(val -> {
+            throw new IllegalArgumentException(ErrorMessage.AlreadyExist("회원"));
+        });
+        return memberRepository.save(dto.toEntity()).getId();
+    }
+
+    @Transactional
+    public Long update(MemberRequestDto dto) throws IllegalArgumentException {
+        Member member = memberRepository.findByStudentId(dto.getStudentId())
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("회원")));
+        member.update(dto);
+        return member.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public MemberResponseDto find(Long id) throws IllegalArgumentException {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("회원")));
+        return new MemberResponseDto(member);
     }
 
     @Transactional(readOnly = true)
@@ -39,6 +60,14 @@ public class MemberService {
         } catch (NullPointerException e) {
             return new ArrayList<>();
         }
+    }
+
+    @Transactional
+    public Long delete(Long id) throws IllegalArgumentException {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("회원")));
+        memberRepository.deleteById(id);
+        return id;
     }
 
     @Transactional

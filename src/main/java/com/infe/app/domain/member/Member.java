@@ -66,7 +66,7 @@ public class Member extends BaseTimeEntity {
         this.contact = dto.getContact();
         this.phone = dto.getPhone();
         this.department = dto.getDepartment();
-        this.state = State.valueOf(dto.getState());
+        this.state = State.valueOfLabel(dto.getState());
         this.manageStatus = new ManageStatus(dto.getManageStatus());
     }
 }
