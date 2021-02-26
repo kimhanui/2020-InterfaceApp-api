@@ -22,9 +22,9 @@ public class MemberApiController {
         return memberService.insert(memberRequestDto);
     }
 
-    @PutMapping
-    public Long update(@Valid @RequestBody MemberRequestDto memberRequestDto)throws Exception{
-        return memberService.update(memberRequestDto);
+    @PutMapping("/{id}")
+    public Long update(@PathVariable Long id, @Valid @RequestBody MemberRequestDto memberRequestDto)throws Exception{
+        return memberService.update(id, memberRequestDto);
     }
 
     @GetMapping("/{id}")

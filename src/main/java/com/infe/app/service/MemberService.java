@@ -35,9 +35,14 @@ public class MemberService {
     }
 
     @Transactional
-    public Long update(MemberRequestDto dto) throws IllegalArgumentException {
-        Member member = memberRepository.findByStudentId(dto.getStudentId())
+    public Long update(Long id, MemberRequestDto dto) throws IllegalArgumentException {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NoExist("회원")));
+
+        Optional<Member> isExist = memberRepository.findByStudentId(dto.getStudentId());
+        isExist.ifPresent(val->{
+            throw new IllegalArgumentException(ErrorMessage.AlreadyExist("학번"));
+        });
         member.update(dto);
         return member.getId();
     }

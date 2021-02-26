@@ -65,6 +65,23 @@ public class MemberServiceTest {
         assertThat(target.getManageStatus().isFirstDues()).isEqualTo(false);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void 회원_update_학번중복예외발생(){
+        //given
+        MemberRequestDto dto = MemberRequestDto.builder()
+                .studentId(200200L)
+                .name("lee")
+                .generation(31L)
+                .contact("kim@gmail.com")
+                .phone("010-1111-2222")
+                .state(State.MILITARY.getValue())
+                .manageStatus(new ManageStatus().toDto())
+                .build();
+
+        //when, then
+        memberService.update(1L, dto);
+    }
+
     @Test
     public void 회원_findAll_오름차순() {
         //given
