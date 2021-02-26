@@ -41,7 +41,8 @@ public class MemberService {
 
         Optional<Member> isExist = memberRepository.findByStudentId(dto.getStudentId());
         isExist.ifPresent(val->{
-            throw new IllegalArgumentException(ErrorMessage.AlreadyExist("학번"));
+            if(!member.getStudentId().equals(val.getStudentId()))
+                throw new IllegalArgumentException(ErrorMessage.AlreadyExist("학번"));
         });
         member.update(dto);
         return member.getId();
