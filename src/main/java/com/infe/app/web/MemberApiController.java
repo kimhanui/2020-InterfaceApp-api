@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @Log
 @RequiredArgsConstructor
@@ -19,10 +18,18 @@ public class MemberApiController {
     public final MemberService memberService;
 
     @PostMapping
-    public String insert(@Valid @RequestBody Map<String, List<MemberRequestDto>> dtosRaw) throws Exception{
-        List<MemberRequestDto> dtos = dtosRaw.get("collection");
-        memberService.deleteAll();
-        return memberService.insertAll(dtos);
+    public Long insert(@Valid @RequestBody MemberRequestDto memberRequestDto)throws Exception{
+        return memberService.insert(memberRequestDto);
+    }
+
+    @PutMapping("/{id}")
+    public Long update(@PathVariable Long id, @Valid @RequestBody MemberRequestDto memberRequestDto)throws Exception{
+        return memberService.update(id, memberRequestDto);
+    }
+
+    @GetMapping("/{id}")
+    public MemberResponseDto find(@PathVariable Long id) throws Exception{
+        return memberService.find(id);
     }
 
     @GetMapping("/list")
@@ -30,4 +37,10 @@ public class MemberApiController {
         List<MemberResponseDto> dtos = memberService.findAll();
         return dtos;
     }
+
+    @DeleteMapping("/{id}")
+    public Long delete(@PathVariable Long id) throws Exception{
+        return memberService.delete(id);
+    }
+
 }

@@ -23,7 +23,7 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long studentId;
 
     @Column(nullable = false, length = 20)
@@ -66,7 +66,7 @@ public class Member extends BaseTimeEntity {
         this.contact = dto.getContact();
         this.phone = dto.getPhone();
         this.department = dto.getDepartment();
-        this.state = State.valueOf(dto.getState());
+        this.state = State.valueOfLabel(dto.getState());
         this.manageStatus = new ManageStatus(dto.getManageStatus());
     }
 }

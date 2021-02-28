@@ -1,6 +1,5 @@
 package com.infe.app.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infe.app.domain.member.Member;
 import com.infe.app.domain.member.MemberRepository;
 import com.infe.app.web.dto.MemberRequestDto;
@@ -47,12 +46,6 @@ public class MemberApiControllerTest {
                 .state("졸업")
                 .department("컴공")
                 .build();
-        MemberRequestDto[] dtos = new MemberRequestDto[]{dto};
-        ObjectMapper objectMapper = new ObjectMapper();         //dto를 json형식으로 바꿔줌
-        String stringdtos = objectMapper.writeValueAsString(dtos);
-        String input = "{\"collection\":"+stringdtos+"}";
-
-        log.info(input.toString());
         String url = "http://localhost:" + port + "/api/v1/member";
 
         // when
@@ -60,7 +53,7 @@ public class MemberApiControllerTest {
         MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
         headers.setContentType(mediaType);
 
-        HttpEntity<String> request = new HttpEntity<>(input, headers);
+        HttpEntity<MemberRequestDto> request = new HttpEntity<>(dto, headers);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
 
 
@@ -73,6 +66,8 @@ public class MemberApiControllerTest {
         assertThat(resultMember.getGeneration()).isEqualTo(GENERATION);
         assertThat(resultMember.getContact()).isEqualTo(CONTACT);
     }
+
+
 
 
 }

@@ -7,23 +7,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.java.Log;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @ToString
-@Log
 @NoArgsConstructor
 @Getter
 public class MemberRequestDto {
-
-    @NotEmpty
-    private Long studentId;
     @NotNull
+    private Long studentId;
+
+    @NotBlank
     private String name;
-    @NotEmpty
+
+    @NotNull
     private Long generation;
 
     private String contact;
@@ -51,13 +50,13 @@ public class MemberRequestDto {
 
     @Builder
     public MemberRequestDto(Long studentId,
-            String name,
-            Long generation,
-            String contact,
-            String phone,
-            String department,
-            String state,
-            Map<String, String> manageStatus){
+                            String name,
+                            Long generation,
+                            String contact,
+                            String phone,
+                            String department,
+                            String state,
+                            Map<String, String> manageStatus) {
         this.studentId = studentId;
         this.name = name;
         this.generation = generation;
