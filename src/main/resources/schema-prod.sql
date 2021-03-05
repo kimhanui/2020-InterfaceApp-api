@@ -1,17 +1,3 @@
--- drop table if exists attendance
---
--- drop table if exists calendar
---
--- drop table if exists login
---
--- drop table if exists meeting
---
--- drop table if exists member
---
--- drop table if exists participant
---
--- drop table if exists posts
-
 create table attendance (
                             id bigint not null auto_increment,
                             attendance_date_time datetime,
