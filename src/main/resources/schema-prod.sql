@@ -1,4 +1,11 @@
 -- 반드시 한 줄로 작성해야한다
+drop table if exists attendance
+drop table if exists calendar
+drop table if exists login
+drop table if exists meeting
+drop table if exists member
+drop table if exists participant
+drop table if exists posts
 create table attendance (id bigint not null auto_increment,attendance_date_time datetime,meeting_id bigint,  participant_id bigint,primary key (id)) engine=InnoDB
 create table calendar (id bigint not null auto_increment, created_date_time datetime, modified_date_time datetime, content varchar(255), date date not null, title varchar(255), primary key (id)) engine=InnoDB
 create table login ( id bigint not null auto_increment, pw varchar(255), role varchar(255), primary key (id)) engine=InnoDB
